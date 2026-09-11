@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/Button";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { TRUST_PILLARS } from "@/lib/content";
 import { easeOut } from "@/lib/motion";
 
@@ -14,6 +16,10 @@ export function Hero() {
   const reduce = useReducedMotion();
   const { scrollY } = useScroll();
   const bgY = useTransform(scrollY, [0, 900], [0, reduce ? 0 : 70]);
+  // Ambient video only on desktop and only when motion is welcome; phones and reduced-motion users get the still.
+  const desktop = useMediaQuery("(min-width: 1024px)");
+  const [videoReady, setVideoReady] = useState(false);
+  const showVideo = desktop && !reduce;
 
   return (
     <section className="relative isolate flex min-h-[640px] flex-col overflow-hidden bg-[#161512] text-white lg:min-h-[min(100svh,980px)]">
@@ -25,9 +31,26 @@ export function Hero() {
             src="/images/hero-bg.webp"
             alt="A professional MaidHire housekeeper polishing a dining table in a bright family home"
             {...{ fetchpriority: "high" }}
-            className={`h-full w-full object-cover object-[72%_50%] ${reduce ? "" : "animate-kenburns"}`}
+            className={`h-full w-full object-cover object-[72%_50%] ${reduce || showVideo ? "" : "animate-kenburns"}`}
           />
         </motion.picture>
+        {showVideo && (
+          <video
+            aria-hidden="true"
+            autoPlay
+            muted
+            loop
+            playsInline
+            disablePictureInPicture
+            preload="auto"
+            poster="/images/hero.webp"
+            onCanPlay={() => setVideoReady(true)}
+            className={`absolute inset-0 h-full w-full object-cover object-[68%_50%] transition-opacity duration-[1400ms] ease-out ${videoReady ? "opacity-100" : "opacity-0"}`}
+          >
+            <source src="/video/hero.webm" type="video/webm" />
+            <source src="/video/hero.mp4" type="video/mp4" />
+          </video>
+        )}
         <div className="absolute inset-0 bg-gradient-to-r from-[#0d0f0c]/85 via-[#0d0f0c]/45 via-40% to-transparent" />
         <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#0d0f0c]/70 to-transparent" />
       </motion.div>

@@ -63,7 +63,7 @@ See `apps/api/.env.example` (all keys documented) and `apps/web/.env.example`.
 
 ## Replacing imagery
 
-All marketing images live in `apps/web/public/images` (hero, section headers, `services/*.webp`). Seed candidate photos live in `apps/api/prisma/seed-assets`. Swap the files, keep the names.
+All marketing images live in `apps/web/public/images` (hero poster, section headers, `services/*.webp`); the ambient hero loop lives in `apps/web/public/video` (`hero.webm` + `hero.mp4`, muted, ~9 s, ≤1.3 MB — re-encode replacements with `ffmpeg -an -movflags +faststart`). Seed candidate photos live in `apps/api/prisma/seed-assets`. Swap the files, keep the names.
 
 ## Roadmap hooks (architected, not built)
 
