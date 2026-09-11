@@ -23,7 +23,7 @@ export function Logo({ tone = "light", className, asLink = true }: Props) {
         />
         <circle cx="32" cy="35" r="5" fill={tone === "light" ? "#ffffff" : "#0a3229"} />
         <path d="M22.5 50c1-6.5 4.5-9.5 9.5-9.5s8.5 3 9.5 9.5z" fill={tone === "light" ? "#ffffff" : "#0a3229"} />
-        <circle cx="47" cy="19" r="6.5" fill="#7ed394" />
+        <circle cx="47" cy="19" r="6.5" fill="#71d98a" />
       </svg>
       <span className="font-sans text-[1.55rem] font-extrabold tracking-[-0.03em] leading-none">
         <span className={tone === "light" ? "text-white" : "text-forest-900"}>Maid</span>

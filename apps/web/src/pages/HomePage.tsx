@@ -16,7 +16,7 @@ export default function HomePage() {
       <Seo title="MaidHire — Verified Domestic Staff in the UAE & Saudi Arabia" description="Find verified maids, nannies, cooks and caregivers in Dubai, Abu Dhabi, Riyadh and Jeddah. Personal matching, full documentation support, replacement guarantee." path="/" />
       <Hero />
 
-      <section className="pb-20 pt-40 lg:pb-28 lg:pt-44">
+      <section className="pb-20 pt-20 lg:pb-28 lg:pt-28">
         <div className="container-x">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <SectionHeader eyebrow="Our Services" title={<>Tailored Support<br />for Every Home</>} description="From daily housekeeping to specialised care, we help you find the right professional for your needs." />

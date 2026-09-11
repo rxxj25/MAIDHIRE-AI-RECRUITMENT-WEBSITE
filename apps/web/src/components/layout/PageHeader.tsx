@@ -50,7 +50,7 @@ export function PageHeader({ eyebrow, title, description, background, subject, s
 
       <div className={cn("container-x relative", compact ? "pb-16 pt-32 lg:pb-20 lg:pt-40" : "pb-20 pt-36 lg:pb-28 lg:pt-48", subject && "lg:pr-[46%]")}>
         <motion.div initial={reduce ? false : "hidden"} animate="visible" variants={{ visible: { transition: { staggerChildren: 0.12, delayChildren: 0.15 } } }} className={cn("max-w-3xl", align === "center" && "mx-auto max-w-4xl text-center")}>
-          <motion.p variants={item} className="eyebrow mb-5 text-mint-400">
+          <motion.p variants={item} className="eyebrow mb-5 text-mint-500">
             {eyebrow}
           </motion.p>
           <motion.h1 variants={item} className={cn("text-balance", serif ? "h-serif text-[2.5rem] sm:text-[3.2rem] lg:text-[3.9rem]" : "h-display text-[2.6rem] sm:text-[3.4rem] lg:text-[4.2rem]")}>

@@ -49,7 +49,7 @@ export function Navbar() {
         <Logo tone="light" />
 
         <nav aria-label="Primary" className="hidden lg:block">
-          <ul className="flex items-center gap-1">
+          <ul className="flex items-center gap-3 xl:gap-5">
             {NAV.map((item) => (
               <li key={item.to}>
                 <NavLink
@@ -57,8 +57,8 @@ export function Navbar() {
                   end={item.to === "/"}
                   className={({ isActive }) =>
                     cn(
-                      "relative inline-flex h-10 items-center rounded-full px-4 text-[0.95rem] font-medium text-white/85 transition-colors duration-300 hover:text-white",
-                      "after:absolute after:inset-x-4 after:-bottom-0.5 after:h-[2px] after:origin-left after:scale-x-0 after:rounded-full after:bg-mint-400 after:transition-transform after:duration-300 after:ease-[var(--ease-out-quart)] hover:after:scale-x-100",
+                      "relative inline-flex h-10 items-center rounded-full px-3 text-[1.02rem] font-medium text-white/85 transition-colors duration-300 hover:text-white",
+                      "after:absolute after:inset-x-3 after:-bottom-0.5 after:h-[2px] after:origin-left after:scale-x-0 after:rounded-full after:bg-mint-500 after:transition-transform after:duration-300 after:ease-[var(--ease-out-quart)] hover:after:scale-x-100",
                       isActive && "text-white after:scale-x-100",
                     )
                   }
@@ -72,7 +72,7 @@ export function Navbar() {
 
         <div className="flex items-center gap-3">
           <div className="hidden sm:block">
-            <Button to="/contact" variant="white" size="md">
+            <Button to="/contact" variant="glass" size="md" className="px-8">
               Contact Us
             </Button>
           </div>
@@ -106,14 +106,14 @@ export function Navbar() {
                   <NavLink
                     to={item.to}
                     end={item.to === "/"}
-                    className={({ isActive }) => cn("flex items-center justify-between border-b border-white/10 py-4 text-lg font-semibold text-white/85", isActive && "text-mint-400")}
+                    className={({ isActive }) => cn("flex items-center justify-between border-b border-white/10 py-4 text-lg font-semibold text-white/85", isActive && "text-mint-500")}
                   >
                     {item.label}
                   </NavLink>
                 </motion.li>
               ))}
               <motion.li variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }} className="pt-6">
-                <Button to="/contact" variant="mint" size="lg" className="w-full" arrow>
+                <Button to="/contact" variant="accent" size="lg" className="w-full" arrow>
                   Find a Maid
                 </Button>
               </motion.li>

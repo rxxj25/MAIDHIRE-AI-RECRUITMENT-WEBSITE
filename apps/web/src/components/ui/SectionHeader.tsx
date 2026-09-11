@@ -12,12 +12,12 @@ interface Props {
   className?: string;
 }
 
-export function SectionHeader({ eyebrow, title, description, align = "left", tone = "dark", serif = false, className }: Props) {
+export function SectionHeader({ eyebrow, title, description, align = "left", tone = "dark", serif = true, className }: Props) {
   const light = tone === "light";
   return (
     <Reveal staggerChildren={0.1} className={cn("max-w-2xl", align === "center" && "mx-auto text-center", className)}>
       {eyebrow && (
-        <RevealItem as="p" className={cn("eyebrow mb-4", light ? "text-mint-400" : "text-forest-700")}>
+        <RevealItem as="p" className={cn("eyebrow mb-4", light ? "text-mint-500" : "text-forest-700")}>
           {eyebrow}
         </RevealItem>
       )}

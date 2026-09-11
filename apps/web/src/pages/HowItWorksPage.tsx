@@ -18,12 +18,14 @@ export default function HowItWorksPage() {
   return (
     <>
       <Seo title="How It Works" description="Share your requirements, get matched with verified candidates, interview and hire with confidence. Documentation handled end-to-end." path="/how-it-works" />
-      <PageHeader eyebrow="How It Works" serif={false} title={<>Get the Right Help<br />in 4 Easy Steps</>} description="We make domestic staff recruitment simple, transparent, and stress-free." background="/images/bg-warm.webp" subject="/images/how-it-works.webp" subjectAlt="A smiling housekeeper in uniform" />
+      <PageHeader eyebrow="How It Works" title={<>Get the Right Help<br />in 4 Easy Steps</>} description="We make domestic staff recruitment simple, transparent, and stress-free." background="/images/bg-warm.webp" subject="/images/how-it-works.webp" subjectAlt="A smiling housekeeper in uniform" />
 
-      <section className="bg-cream-200/70 py-16 lg:py-24">
+      <section className="py-16 lg:py-24">
         <div className="container-x">
-          <Steps />
-          <div className="mt-16">
+          <div className="-mt-28 rounded-2xl bg-cream-50 px-6 py-12 shadow-lift ring-1 ring-forest-900/6 lg:-mt-36 lg:px-10 lg:py-14">
+            <Steps />
+          </div>
+          <div className="mt-10">
             <CtaBanner />
           </div>
         </div>

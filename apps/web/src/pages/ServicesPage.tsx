@@ -11,7 +11,7 @@ export default function ServicesPage() {
   return (
     <>
       <Seo title="Our Services" description="Full-time, part-time and live-in maids, cooks, elderly caregivers and nannies for homes in the UAE and Saudi Arabia." path="/services" />
-      <PageHeader eyebrow="Our Services" serif={false} title={<>Tailored Support<br />for Every Home</>} description="From daily housekeeping to specialised care, we help you find the right professional for your needs." background="/images/bg-warm.webp" subject="/images/services-header.webp" subjectAlt="A housekeeper preparing a bed with fresh white pillows" />
+      <PageHeader eyebrow="Our Services" title={<>Tailored Support<br />for Every Home</>} description="From daily housekeeping to specialised care, we help you find the right professional for your needs." background="/images/bg-warm.webp" subject="/images/services-header.webp" subjectAlt="A housekeeper preparing a bed with fresh white pillows" />
 
       <section className="py-16 lg:py-24">
         <div className="container-x">

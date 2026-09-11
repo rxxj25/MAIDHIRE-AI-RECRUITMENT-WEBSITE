@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-type Variant = "primary" | "mint" | "outline" | "outline-light" | "white" | "ghost";
+type Variant = "primary" | "mint" | "accent" | "glass" | "outline" | "outline-light" | "white" | "ghost";
 type Size = "sm" | "md" | "lg";
 
 const base =
@@ -12,6 +12,8 @@ const base =
 const variants: Record<Variant, string> = {
   primary: "bg-forest-900 text-white shadow-[0_8px_20px_-10px_rgb(10_50_41/0.6)] hover:bg-forest-800 hover:shadow-[0_14px_28px_-12px_rgb(10_50_41/0.6)] hover:-translate-y-0.5",
   mint: "bg-mint-300 text-forest-950 hover:bg-mint-400 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-14px_rgb(126_211_148/0.9)]",
+  accent: "bg-mint-500 text-forest-950 hover:bg-mint-600 hover:-translate-y-0.5 hover:shadow-[0_16px_32px_-14px_rgb(113_217_138/0.8)]",
+  glass: "glass-pill text-white hover:bg-white/20 hover:-translate-y-0.5",
   outline: "border border-forest-900/25 text-forest-900 hover:border-forest-900 hover:bg-forest-900 hover:text-white",
   "outline-light": "border border-white/55 text-white hover:bg-white hover:text-forest-950 hover:border-white",
   white: "bg-white text-forest-950 shadow-[0_8px_24px_-12px_rgb(0_0_0/0.4)] hover:-translate-y-0.5 hover:shadow-[0_16px_30px_-14px_rgb(0_0_0/0.45)]",

@@ -1,5 +1,5 @@
 import { Seo } from "@/components/ui/Seo";
-import { PageHeader } from "@/components/layout/PageHeader";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 import { PricingPlans, CurrencyToggle } from "@/components/sections/PricingPlans";
 import { usePlans } from "@/lib/queries";
 import { FAQS } from "@/lib/content";
@@ -11,28 +11,33 @@ export default function PricingPage() {
   return (
     <>
       <Seo title="Pricing" description="Transparent placement plans in AED and SAR — Basic, Standard and Premium — with replacement guarantees and documentation support." path="/pricing" />
-      <PageHeader compact eyebrow="Pricing" align="center" title={<>Transparent Plans<br />for Your Peace of Mind</>} description="Choose a plan that works best for your home. No hidden charges." background="/images/bg-pricing.webp">
-        <div className="flex justify-center">
-          <CurrencyToggle />
+      {/* Full-bleed blurred interior behind header + glass cards, as in the design */}
+      <div className="relative isolate overflow-hidden bg-[#1f1a15] text-white">
+        <div aria-hidden="true" className="absolute inset-0 -z-10">
+          <img src="/images/bg-pricing.webp" alt="" className="h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-[#14110d]/15" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-cream-100 to-transparent" />
         </div>
-      </PageHeader>
-      <div aria-hidden="true" className="pointer-events-none relative hidden lg:block">
-        <p className="script absolute -top-52 left-[6%] rotate-[-12deg] text-3xl text-white/75">Trusted Care ♡<br />for Brighter<br />Tomorrows</p>
-        <p className="script absolute -top-60 right-[5%] rotate-[8deg] text-right text-3xl text-white/75">Better<br />Homes<br />Happier<br />Lives</p>
-      </div>
+        <p aria-hidden="true" className="script pointer-events-none absolute left-[3%] top-[26%] hidden rotate-[-12deg] text-[2.1rem] leading-tight text-white/70 xl:block">Trusted Care ♡<br />for Brighter<br />Tomorrows</p>
+        <p aria-hidden="true" className="script pointer-events-none absolute right-[3%] top-[22%] hidden rotate-[8deg] text-right text-[2.1rem] leading-tight text-white/70 xl:block">Better<br />Homes<br />Happier<br />Lives</p>
 
-      <section className="relative pb-20 pt-6 lg:pb-28">
-        <div className="container-x">
-          {isError ? (
-            <p role="alert" className="text-center text-ink-500">
-              Plans are temporarily unavailable. Please contact us for a quote.
-            </p>
-          ) : (
-            <PricingPlans plans={data} loading={isLoading} />
-          )}
-          <p className="mt-8 text-center text-[0.85rem] text-ink-400">Prices exclude government fees (visa, medical, Emirates ID / Iqama) which are billed at cost. Service fees are one-time per placement.</p>
+        <div className="container-x pb-24 pt-36 lg:pt-44">
+          <SectionHeader eyebrow="Pricing" tone="light" align="center" title={<>Transparent Plans<br />for Your Peace of Mind</>} description="Choose a plan that works best for your home. No hidden charges." />
+          <div className="mt-8 flex justify-center">
+            <CurrencyToggle />
+          </div>
+          <div className="mt-14">
+            {isError ? (
+              <p role="alert" className="text-center text-white/80">
+                Plans are temporarily unavailable. Please contact us for a quote.
+              </p>
+            ) : (
+              <PricingPlans plans={data} loading={isLoading} />
+            )}
+          </div>
+          <p className="mt-8 text-center text-[0.85rem] text-white/60">Prices exclude government fees (visa, medical, Emirates ID / Iqama) which are billed at cost. Service fees are one-time per placement.</p>
         </div>
-      </section>
+      </div>
 
       <section className="bg-cream-200/70 py-20 lg:py-28">
         <div className="container-x max-w-3xl">
