@@ -4,8 +4,8 @@ import type { Transition, Variants } from "framer-motion";
 export const easeOut: Transition["ease"] = [0.16, 1, 0.3, 1];
 
 export const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: easeOut } },
+  hidden: { opacity: 0, y: 44 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.95, ease: easeOut } },
 };
 
 export const fadeIn: Variants = {
@@ -23,7 +23,7 @@ export const stagger = (staggerChildren = 0.08, delayChildren = 0): Variants => 
   visible: { transition: { staggerChildren, delayChildren } },
 });
 
-export const viewport = { once: true, margin: "-10% 0px -10% 0px" } as const;
+export const viewport = { once: true, margin: "0px 0px -18% 0px" } as const;
 
 export const pageTransition = {
   initial: { opacity: 0, y: 12 },

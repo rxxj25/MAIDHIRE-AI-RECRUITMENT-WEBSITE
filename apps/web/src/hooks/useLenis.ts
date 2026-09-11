@@ -4,6 +4,9 @@ import type Lenis from "lenis";
 
 let lenis: Lenis | null = null;
 
+/** The active Lenis instance (null on touch devices / reduced motion). */
+export const getLenis = () => lenis;
+
 /** Programmatic scroll that cooperates with Lenis when it is active (native fallback otherwise). */
 export function scrollToTarget(target: number | HTMLElement | string, opts: { offset?: number; immediate?: boolean } = {}) {
   const { offset = -96, immediate = false } = opts;

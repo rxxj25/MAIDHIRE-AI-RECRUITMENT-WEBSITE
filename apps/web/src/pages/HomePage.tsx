@@ -3,7 +3,7 @@ import { Hero } from "@/components/sections/Hero";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ServicesGrid } from "@/components/sections/ServicesGrid";
 import { Steps } from "@/components/sections/Steps";
-import { CtaBanner } from "@/components/sections/CtaBanner";
+import { ParallaxShowcase } from "@/components/sections/ParallaxShowcase";
 import { FeaturedCandidates } from "@/components/sections/FeaturedCandidates";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { StatsBand } from "@/components/sections/StatsBand";
@@ -38,11 +38,10 @@ export default function HomePage() {
           <div className="mt-14">
             <Steps />
           </div>
-          <div className="mt-16">
-            <CtaBanner />
-          </div>
         </div>
       </section>
+
+      <ParallaxShowcase />
 
       <FeaturedCandidates />
 
