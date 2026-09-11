@@ -13,19 +13,24 @@ const social = [
 
 export function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-forest-950 text-white">
-      <div aria-hidden="true" className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-mint-400/8 blur-3xl" />
-      <div className="container-x relative grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr] lg:py-20">
+    <footer className="relative isolate overflow-hidden bg-[#0b3a2c] text-white">
+      {/* Brand artwork: house silhouette (left), leaves (top-right), towels & dispenser (bottom-right). Columns stay in the clean centre. */}
+      <picture aria-hidden="true" className="absolute inset-0 -z-10 block">
+        <source media="(min-width: 768px)" srcSet="/images/footer-bg.webp" />
+        <img src="/images/footer-bg-sm.webp" alt="" loading="lazy" decoding="async" className="h-full w-full object-cover object-[80%_50%] md:object-center" />
+      </picture>
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-b from-[#062b21]/40 via-transparent to-[#062b21]/55 md:from-[#062b21]/20" />
+      <div className="container-x relative grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr] lg:py-20 lg:pr-[16%] xl:pr-[20%]">
         <div className="max-w-sm">
           <Logo tone="light" />
-          <p className="mt-6 text-pretty text-[0.95rem] leading-relaxed text-white/70">
+          <p className="mt-6 text-pretty text-[0.95rem] leading-relaxed text-white/80">
             Verified, trained domestic staff for discerning families across the UAE and Saudi Arabia. Safe, personal and hassle-free.
           </p>
           <p className="script mt-6 text-2xl text-mint-400">Better Homes, Happier Lives</p>
           <ul className="mt-6 flex gap-3">
             {social.map(({ href, label, Icon }) => (
               <li key={label}>
-                <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/8 text-white/80 transition-colors hover:bg-mint-400 hover:text-forest-950">
+                <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/15 bg-white/10 text-white/90 backdrop-blur-sm transition-colors hover:bg-mint-400 hover:text-forest-950">
                   <Icon className="h-4.5 w-4.5" />
                 </a>
               </li>
@@ -35,7 +40,7 @@ export function Footer() {
 
         <nav aria-label="Services">
           <h3 className="eyebrow text-mint-400">Services</h3>
-          <ul className="mt-5 space-y-3 text-[0.95rem] text-white/75">
+          <ul className="mt-5 space-y-3 text-[0.95rem] text-white/85">
             {SERVICE_TYPES.map((s) => (
               <li key={s.slug}>
                 <Link to={`/services#${s.slug}`} className="transition-colors hover:text-white">
@@ -48,7 +53,7 @@ export function Footer() {
 
         <nav aria-label="Company">
           <h3 className="eyebrow text-mint-400">Company</h3>
-          <ul className="mt-5 space-y-3 text-[0.95rem] text-white/75">
+          <ul className="mt-5 space-y-3 text-[0.95rem] text-white/85">
             {[
               ["/about", "About Us"],
               ["/how-it-works", "How It Works"],
@@ -68,7 +73,7 @@ export function Footer() {
 
         <div>
           <h3 className="eyebrow text-mint-400">Get in touch</h3>
-          <ul className="mt-5 space-y-4 text-[0.95rem] text-white/75">
+          <ul className="mt-5 space-y-4 text-[0.95rem] text-white/85">
             <li className="flex gap-3">
               <Phone aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-mint-400" />
               <span>
@@ -97,8 +102,8 @@ export function Footer() {
           </ul>
         </div>
       </div>
-      <div className="border-t border-white/10">
-        <div className="container-x flex flex-col items-center justify-between gap-3 py-6 text-[0.8rem] text-white/50 sm:flex-row">
+      <div className="border-t border-white/12 bg-[#062b21]/35 backdrop-blur-[2px]">
+        <div className="container-x flex flex-col items-center justify-between gap-3 py-6 text-[0.8rem] text-white/60 sm:flex-row lg:pr-[16%] xl:pr-[20%]">
           <p>© {new Date().getFullYear()} MaidHire. All rights reserved.</p>
           <ul className="flex gap-6">
             <li>
