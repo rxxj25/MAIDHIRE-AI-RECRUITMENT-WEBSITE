@@ -47,13 +47,13 @@ export default function ContactPage() {
       <Seo title="Contact Us" description="Talk to a MaidHire consultant in Dubai or Riyadh. Send a message or submit a hire request — we reply within 24 hours." path="/contact" />
       <section className="relative isolate overflow-hidden">
         <div aria-hidden="true" className="absolute inset-0 -z-20">
-          <img src="/images/bg-contact.webp" alt="" className="h-full w-full object-cover object-[15%_50%]" {...{ fetchpriority: "high" }} />
+          <img src="/images/bg-contact.webp" alt="" className="h-full w-full object-cover object-[48%_50%]" {...{ fetchpriority: "high" }} />
           {/* Dark glass band behind the fixed navbar + a whisper of cream so the copy stays legible on the bright wall */}
           <div className="absolute inset-x-0 top-0 h-[84px] bg-[#1d1a15]/70 backdrop-blur-md lg:h-[92px]" />
-          <div className="absolute inset-0 bg-sand-100/25 sm:bg-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-sand-100/70 via-sand-100/30 via-45% to-transparent" />
         </div>
 
-        <div className="container-x grid gap-12 pb-14 pt-32 lg:grid-cols-[1fr_1.05fr] lg:gap-14 lg:pb-16 lg:pt-40">
+        <div className="container-x grid gap-12 pb-14 pt-32 lg:grid-cols-[1fr_1.05fr] lg:gap-14 lg:pb-20 lg:pt-40">
           <Reveal staggerChildren={0.1} className="max-w-[560px] lg:pt-6">
             <RevealItem as="p" className="eyebrow text-forest-700">
               Get in Touch
@@ -103,7 +103,12 @@ export default function ContactPage() {
             </RevealItem>
           </Reveal>
 
-          <motion.div initial={reduce ? false : { opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: easeOut, delay: 0.3 }} className="rounded-[28px] bg-white p-6 shadow-lift sm:p-9 lg:p-12">
+          <motion.div
+            initial={reduce ? false : { opacity: 0, y: 40 }}
+            animate={reduce ? { opacity: 1 } : { opacity: 1, y: [0, -10, 0] }}
+            transition={reduce ? { duration: 0.3 } : { opacity: { duration: 1, ease: easeOut, delay: 0.3 }, y: { delay: 0.3, duration: 7, repeat: Infinity, ease: "easeInOut" } }}
+            className="relative rounded-[28px] bg-white p-6 shadow-[0_2px_4px_rgb(10_50_41/0.04),0_24px_48px_-16px_rgb(10_50_41/0.28),0_60px_120px_-40px_rgb(10_50_41/0.35)] ring-1 ring-forest-900/6 sm:p-9 lg:p-12"
+          >
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
                 <h2 className="h-serif text-[2.2rem] text-ink-950 sm:text-[2.7rem]">{mode === "message" ? "Send Us a Message" : "Request a Hire"}</h2>
