@@ -40,7 +40,7 @@ export default function CandidatesPage() {
 
       <section className="py-10 lg:py-14">
         <div className="container-x">
-          <div className="-mt-20 rounded-2xl bg-cream-50 p-4 shadow-lift ring-1 ring-forest-900/8 lg:-mt-24">
+          <div className="relative z-10 -mt-20 rounded-2xl bg-cream-50 p-4 shadow-lift ring-1 ring-forest-900/8 lg:-mt-24">
             <CandidateFilters value={filters} onChange={(f) => update({ ...f, page: 1 })} />
           </div>
 
