@@ -18,11 +18,11 @@ export default function HowItWorksPage() {
   return (
     <>
       <Seo title="How It Works" description="Share your requirements, get matched with verified candidates, interview and hire with confidence. Documentation handled end-to-end." path="/how-it-works" />
-      <PageHeader eyebrow="How It Works" title={<>Get the Right Help<br />in 4 Easy Steps</>} description="We make domestic staff recruitment simple, transparent, and stress-free." background="/images/how-it-works.webp" />
+      <PageHeader eyebrow="How It Works" title={<>Get the Right Help<br />in 4 Easy Steps</>} description="We make domestic staff recruitment simple, transparent, and stress-free." background="/images/how-it-works.webp" overlap />
 
-      <section className="py-16 lg:py-24">
+      <section className="pb-16 lg:pb-24">
         <div className="container-x">
-          <div className="-mt-28 rounded-2xl bg-cream-50 px-6 py-12 shadow-lift ring-1 ring-forest-900/6 lg:-mt-36 lg:px-10 lg:py-14">
+          <div className="relative z-10 -mt-20 rounded-[22px] bg-cream-50 px-6 py-12 shadow-[0_30px_60px_-30px_rgb(10_50_41/0.45)] ring-1 ring-forest-900/6 lg:-mt-24 lg:px-10 lg:py-14">
             <Steps />
           </div>
           <div className="mt-10">

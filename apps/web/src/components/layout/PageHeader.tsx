@@ -17,13 +17,15 @@ interface Props {
   children?: ReactNode;
   compact?: boolean;
   className?: string;
+  /** Extra bottom space so an overlapping card can float over the photo. */
+  overlap?: boolean;
 }
 
 /**
  * Dark photographic page header used by every inner page (matches the mockups' consistent top band).
  * Background gets a very subtle parallax via transform only; text staggers in on mount.
  */
-export function PageHeader({ eyebrow, title, description, background, subject, subjectAlt = "", align = "left", serif = true, children, compact, className }: Props) {
+export function PageHeader({ eyebrow, title, description, background, subject, subjectAlt = "", align = "left", serif = true, children, compact, className, overlap }: Props) {
   const reduce = useReducedMotion();
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 600], [0, reduce ? 0 : 90]);
@@ -48,7 +50,7 @@ export function PageHeader({ eyebrow, title, description, background, subject, s
         />
       )}
 
-      <div className={cn("container-x relative", compact ? "pb-16 pt-32 lg:pb-20 lg:pt-40" : "pb-20 pt-36 lg:pb-28 lg:pt-48", subject && "lg:pr-[46%]")}>
+      <div className={cn("container-x relative", compact ? "pb-16 pt-32 lg:pb-20 lg:pt-40" : "pb-20 pt-36 lg:pb-28 lg:pt-48", overlap && "pb-40 lg:pb-52", subject && "lg:pr-[46%]")}>
         <motion.div initial={reduce ? false : "hidden"} animate="visible" variants={{ visible: { transition: { staggerChildren: 0.12, delayChildren: 0.15 } } }} className={cn("max-w-3xl", align === "center" && "mx-auto max-w-4xl text-center")}>
           <motion.p variants={item} className="eyebrow mb-5 text-mint-500">
             {eyebrow}

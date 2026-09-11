@@ -45,18 +45,16 @@ export default function ContactPage() {
   return (
     <>
       <Seo title="Contact Us" description="Talk to a MaidHire consultant in Dubai or Riyadh. Send a message or submit a hire request — we reply within 24 hours." path="/contact" />
-      {/* Dark band behind the fixed navbar, as in the design */}
-      <div className="h-[84px] bg-[#1d1a15] lg:h-[92px]" aria-hidden="true" />
-
       <section className="relative isolate overflow-hidden">
         <div aria-hidden="true" className="absolute inset-0 -z-20">
-          <img src="/images/bg-contact.webp" alt="" className="h-full w-full object-cover object-[60%_50%]" {...{ fetchpriority: "high" }} />
+          <img src="/images/bg-contact.webp" alt="" className="h-full w-full object-cover object-[15%_50%]" {...{ fetchpriority: "high" }} />
+          {/* Dark glass band behind the fixed navbar + a whisper of cream so the copy stays legible on the bright wall */}
+          <div className="absolute inset-x-0 top-0 h-[84px] bg-[#1d1a15]/70 backdrop-blur-md lg:h-[92px]" />
+          <div className="absolute inset-0 bg-sand-100/25 sm:bg-transparent" />
         </div>
-        {/* Cream glass panel over the left half (leaves the plant in the photo visible at the far left) */}
-        <div aria-hidden="true" className="absolute inset-y-0 left-0 -z-10 w-full bg-sand-100/92 backdrop-blur-[2px] lg:left-[11%] lg:w-[46%] lg:bg-sand-100/88 lg:backdrop-blur-sm" />
 
-        <div className="container-x grid gap-12 py-14 lg:grid-cols-[1fr_1.05fr] lg:gap-14 lg:py-16 xl:pl-[14%]">
-          <Reveal staggerChildren={0.1} className="max-w-[520px] lg:pt-4">
+        <div className="container-x grid gap-12 pb-14 pt-32 lg:grid-cols-[1fr_1.05fr] lg:gap-14 lg:pb-16 lg:pt-40">
+          <Reveal staggerChildren={0.1} className="max-w-[560px] lg:pt-6">
             <RevealItem as="p" className="eyebrow text-forest-700">
               Get in Touch
             </RevealItem>
@@ -65,7 +63,7 @@ export default function ContactPage() {
               <br />
               to Help
             </RevealItem>
-            <RevealItem as="p" className="mt-5 text-pretty text-[1.2rem] leading-relaxed text-ink-900">
+            <RevealItem as="p" className="mt-6 text-pretty text-[1.25rem] leading-relaxed text-ink-900">
               Have questions or need personalised assistance? Our team in Dubai and Riyadh is just a message away.
             </RevealItem>
             <RevealItem as="ul" className="mt-8 space-y-4">
@@ -87,28 +85,25 @@ export default function ContactPage() {
                 </li>
               ))}
             </RevealItem>
-            <RevealItem className="mt-8 flex items-end justify-between gap-6">
-              <div>
-                <ul className="flex gap-4">
-                  {social.map(({ href, label, Icon }) => (
-                    <li key={label}>
-                      <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="flex h-12 w-12 items-center justify-center rounded-lg bg-forest-900 text-white transition-colors hover:bg-forest-700">
-                        <Icon className="h-5 w-5" />
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-                <hr className="mt-10 w-56 border-forest-900/60" />
-              </div>
-              <p aria-hidden="true" className="script hidden rotate-[-8deg] text-[2.4rem] leading-[0.95] text-forest-900 sm:block">
+            <RevealItem className="mt-10 flex flex-wrap items-end justify-between gap-6">
+              <p aria-hidden="true" className="script text-[2.3rem] leading-[1.05] text-forest-900">
                 Better Homes
                 <br />
                 Happier Lives
               </p>
+              <ul className="flex gap-3">
+                {social.map(({ href, label, Icon }) => (
+                  <li key={label}>
+                    <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="flex h-10 w-10 items-center justify-center rounded-lg bg-forest-900/90 text-white transition-colors hover:bg-forest-700">
+                      <Icon className="h-4.5 w-4.5" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </RevealItem>
           </Reveal>
 
-          <motion.div initial={reduce ? false : { opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: easeOut, delay: 0.3 }} className="rounded-[22px] bg-cream-50 p-6 shadow-lift sm:p-9 lg:p-11">
+          <motion.div initial={reduce ? false : { opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: easeOut, delay: 0.3 }} className="rounded-[28px] bg-white p-6 shadow-lift sm:p-9 lg:p-12">
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
                 <h2 className="h-serif text-[2.2rem] text-ink-950 sm:text-[2.7rem]">{mode === "message" ? "Send Us a Message" : "Request a Hire"}</h2>
