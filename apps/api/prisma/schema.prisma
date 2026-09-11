@@ -1,0 +1,221 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CandidateStatus {
+  APPLIED
+  SCREENING
+  INTERVIEW
+  VERIFIED
+  AVAILABLE
+  HIRED
+  INACTIVE
+}
+
+enum Availability {
+  IMMEDIATE
+  WITHIN_2_WEEKS
+  WITHIN_1_MONTH
+  FLEXIBLE
+}
+
+enum Country {
+  AE
+  SA
+}
+
+enum Currency {
+  AED
+  SAR
+}
+
+enum RequestStatus {
+  NEW
+  CONTACTED
+  MATCHING
+  INTERVIEWING
+  PLACED
+  CLOSED
+}
+
+enum MessageStatus {
+  UNREAD
+  READ
+  REPLIED
+  ARCHIVED
+}
+
+enum DocumentType {
+  PHOTO
+  PASSPORT
+  VISA
+  MEDICAL
+  POLICE_CLEARANCE
+  CERTIFICATE
+  OTHER
+}
+
+model AdminUser {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime @default(now())
+  lastLoginAt  DateTime?
+  statusLogs   CandidateStatusLog[]
+}
+
+model Candidate {
+  id                String          @id @default(uuid())
+  slug              String          @unique
+  firstName         String
+  lastName          String
+  /// Public-facing name, e.g. "Priya S."
+  displayName       String
+  headline          String?
+  bio               String?
+  email             String?
+  phone             String
+  whatsapp          String?
+  dateOfBirth       DateTime
+  nationality       String
+  currentCountry    Country
+  currentCity       String
+  primaryService    String
+  skills            String[]
+  languages         String[]
+  yearsExperience   Int
+  experienceSummary String
+  availability      Availability
+  expectedSalary    Int
+  salaryCurrency    Currency
+  hasGulfExperience Boolean         @default(false)
+  liveInPreferred   Boolean         @default(true)
+  status            CandidateStatus @default(APPLIED)
+  isFeatured        Boolean         @default(false)
+  rating            Decimal         @default(0) @db.Decimal(2, 1)
+  reviewCount       Int             @default(0)
+  photoUrl          String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  documents  CandidateDocument[]
+  references CandidateReference[]
+  statusLogs CandidateStatusLog[]
+  requests   HireRequest[]
+
+  @@index([status, isFeatured])
+  @@index([primaryService, currentCity])
+  @@index([nationality])
+}
+
+model CandidateDocument {
+  id          String       @id @default(uuid())
+  candidateId String
+  candidate   Candidate    @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  type        DocumentType
+  fileName    String
+  storageKey  String
+  mimeType    String
+  sizeBytes   Int
+  uploadedAt  DateTime     @default(now())
+
+  @@index([candidateId])
+}
+
+model CandidateReference {
+  id          String    @id @default(uuid())
+  candidateId String
+  candidate   Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  name        String
+  relation    String
+  phone       String
+  verified    Boolean   @default(false)
+}
+
+model CandidateStatusLog {
+  id          String          @id @default(uuid())
+  candidateId String
+  candidate   Candidate       @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  fromStatus  CandidateStatus?
+  toStatus    CandidateStatus
+  note        String?
+  changedById String?
+  changedBy   AdminUser?      @relation(fields: [changedById], references: [id], onDelete: SetNull)
+  createdAt   DateTime        @default(now())
+
+  @@index([candidateId, createdAt])
+}
+
+/// A customer (employer) hire request. No account needed — details are stored here.
+model HireRequest {
+  id                     String        @id @default(uuid())
+  fullName               String
+  email                  String
+  phone                  String
+  country                Country
+  city                   String
+  service                String
+  planSlug               String?
+  candidateId            String?
+  candidate              Candidate?    @relation(fields: [candidateId], references: [id], onDelete: SetNull)
+  startDate              String?
+  familySize             Int?
+  preferredNationalities String[]
+  preferredLanguages     String[]
+  liveIn                 Boolean       @default(true)
+  notes                  String?
+  status                 RequestStatus @default(NEW)
+  adminNotes             String?
+  ipHash                 String?
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+
+  @@index([status, createdAt])
+  @@index([email])
+}
+
+model ContactMessage {
+  id        String        @id @default(uuid())
+  name      String
+  email     String
+  phone     String
+  service   String?
+  message   String
+  status    MessageStatus @default(UNREAD)
+  ipHash    String?
+  createdAt DateTime      @default(now())
+
+  @@index([status, createdAt])
+}
+
+model Plan {
+  id        String   @id @default(uuid())
+  slug      String   @unique
+  name      String
+  tagline   String
+  priceAed  Int
+  priceSar  Int
+  features  String[]
+  footnote  String?
+  isPopular Boolean  @default(false)
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  updatedAt DateTime @updatedAt
+}
+
+model Testimonial {
+  id             String   @id @default(uuid())
+  authorName     String
+  authorLocation String
+  quote          String
+  rating         Int      @default(5)
+  isPublished    Boolean  @default(true)
+  sortOrder      Int      @default(0)
+  createdAt      DateTime @default(now())
+}

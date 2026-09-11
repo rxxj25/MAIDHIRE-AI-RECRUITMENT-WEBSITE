@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+/* ---------- Design tokens (extracted from the MaidHire mockups) ---------- */
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+  --font-script: "Caveat", "Segoe Script", cursive;
+
+  --color-forest-950: #06231d;
+  --color-forest-900: #0a3229;
+  --color-forest-800: #0f4436;
+  --color-forest-700: #175a48;
+  --color-forest-600: #1f6f59;
+  --color-mint-500: #7ed394;
+  --color-mint-400: #a3e1b7;
+  --color-mint-300: #abeab1;
+  --color-mint-200: #d3f3dc;
+  --color-mint-100: #e9f8ee;
+  --color-cream-50: #fcfbf8;
+  --color-cream-100: #f8f6f1;
+  --color-cream-200: #eae9e2;
+  --color-cream-300: #ddd9cf;
+  --color-sand-100: #faf0e5;
+  --color-ink-950: #000f12;
+  --color-ink-900: #0a1f1a;
+  --color-ink-700: #2f3f3a;
+  --color-ink-500: #5c6b66;
+  --color-ink-400: #7c8a85;
+  --color-ink-300: #a9b3af;
+  --color-gold-500: #e5a626;
+  --color-danger-500: #d14343;
+  --color-danger-100: #fbe9e9;
+
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+  --radius-3xl: 1.75rem;
+
+  --shadow-soft: 0 1px 2px rgb(10 50 41 / 0.04), 0 8px 24px -12px rgb(10 50 41 / 0.12);
+  --shadow-card: 0 2px 6px rgb(10 50 41 / 0.05), 0 20px 40px -24px rgb(10 50 41 / 0.25);
+  --shadow-lift: 0 4px 10px rgb(10 50 41 / 0.06), 0 32px 56px -28px rgb(10 50 41 / 0.35);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-cream-100 text-ink-900 font-sans antialiased;
+    font-feature-settings: "ss01", "cv11";
+  }
+  ::selection {
+    background: var(--color-mint-300);
+    color: var(--color-forest-950);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-mint-500);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  img {
+    @apply max-w-full h-auto;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-[1320px] px-5 sm:px-8 lg:px-12;
+  }
+  .eyebrow {
+    @apply text-[0.72rem] font-bold uppercase tracking-[0.28em];
+  }
+  .h-display {
+    @apply font-sans font-extrabold tracking-[-0.03em] leading-[1.02];
+  }
+  .h-serif {
+    @apply font-serif font-semibold tracking-[-0.015em] leading-[1.08];
+  }
+  .script {
+    @apply font-script;
+  }
+  .card {
+    @apply rounded-2xl bg-cream-50 shadow-card ring-1 ring-forest-900/6;
+  }
+  .field {
+    @apply w-full rounded-xl border border-forest-900/12 bg-white px-4 py-3 text-[0.95rem] text-ink-900 placeholder:text-ink-400 transition-[border-color,box-shadow] duration-200 focus:border-forest-700 focus:outline-none focus:ring-4 focus:ring-mint-300/40;
+  }
+  .field-error {
+    @apply border-danger-500 focus:border-danger-500 focus:ring-danger-100;
+  }
+  .glass-dark {
+    background: rgb(6 35 29 / 0.86);
+    backdrop-filter: saturate(140%) blur(14px);
+    -webkit-backdrop-filter: saturate(140%) blur(14px);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  .mask-fade-l {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 28%);
+    mask-image: linear-gradient(to right, transparent 0%, black 28%);
+  }
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+  @keyframes kenburns {
+    from { transform: scale(1.06) translate3d(0, 0, 0); }
+    to { transform: scale(1) translate3d(-1.5%, 0.5%, 0); }
+  }
+  .animate-kenburns {
+    animation: kenburns 16s var(--ease-out-quart) both;
+  }
+  @keyframes marquee {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-50%, 0, 0); }
+  }
+  .animate-marquee {
+    animation: marquee var(--marquee-duration, 60s) linear infinite;
+  }
+  .animate-marquee:hover {
+    animation-play-state: paused;
+  }
+}
