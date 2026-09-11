@@ -17,7 +17,7 @@ export default function AboutPage() {
   return (
     <>
       <Seo title="About MaidHire" description="MaidHire is a premium domestic staffing agency serving families in the UAE and Saudi Arabia with verified, ethically recruited household professionals." path="/about" />
-      <PageHeader eyebrow="About Us" title={<>Trusted Care for<br />Brighter Tomorrows</>} description="We started MaidHire because finding trustworthy help for your home should feel personal, safe and simple — for families and for the professionals who care for them." background="/images/bg-warm.webp" subject="/images/cta-towels.webp" subjectAlt="A MaidHire housekeeper holding folded towels" />
+      <PageHeader eyebrow="About Us" title={<>Trusted Care for<br />Brighter Tomorrows</>} description="We started MaidHire because finding trustworthy help for your home should feel personal, safe and simple — for families and for the professionals who care for them." background="/images/how-it-works.webp" />
 
       <section className="py-20 lg:py-28">
         <div className="container-x grid items-center gap-12 lg:grid-cols-2 lg:gap-20">

@@ -30,11 +30,11 @@ export function PageHeader({ eyebrow, title, description, background, subject, s
   const item = { hidden: { opacity: 0, y: 22 }, visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: easeOut } } };
 
   return (
-    <section className={cn("relative isolate overflow-hidden bg-forest-950 text-white", className)}>
+    <section className={cn("relative isolate overflow-hidden bg-[#161512] text-white", className)}>
       <motion.div style={{ y }} className="absolute inset-0 -z-10">
-        <img src={background} alt="" aria-hidden="true" className="h-[120%] w-full object-cover" {...{ fetchpriority: "high" }} />
-        <div className="absolute inset-0 bg-gradient-to-r from-forest-950/85 via-forest-950/55 to-forest-950/25" />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-forest-950/60 to-transparent" />
+        <img src={background} alt="" aria-hidden="true" className="h-[120%] w-full object-cover object-[65%_30%]" {...{ fetchpriority: "high" }} />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0d0f0c]/82 via-[#0d0f0c]/45 via-45% to-[#0d0f0c]/10" />
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#0d0f0c]/60 to-transparent" />
       </motion.div>
 
       {subject && (

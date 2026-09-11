@@ -56,7 +56,7 @@ export default function CandidateProfilePage() {
       <section className="-mt-20 pb-20 lg:pb-28">
         <div className="container-x grid gap-8 lg:grid-cols-[380px_1fr] lg:gap-12">
           <Reveal className="card overflow-hidden p-3 lg:sticky lg:top-28 lg:self-start">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-cream-200">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-cream-200">
               {c.photoUrl ? (
                 <img src={c.photoUrl} alt={`${c.displayName}, ${serviceLabel(c.primaryService)}`} className="h-full w-full object-cover object-top" />
               ) : (

@@ -18,7 +18,7 @@ export default function HowItWorksPage() {
   return (
     <>
       <Seo title="How It Works" description="Share your requirements, get matched with verified candidates, interview and hire with confidence. Documentation handled end-to-end." path="/how-it-works" />
-      <PageHeader eyebrow="How It Works" title={<>Get the Right Help<br />in 4 Easy Steps</>} description="We make domestic staff recruitment simple, transparent, and stress-free." background="/images/bg-warm.webp" subject="/images/how-it-works.webp" subjectAlt="A smiling housekeeper in uniform" />
+      <PageHeader eyebrow="How It Works" title={<>Get the Right Help<br />in 4 Easy Steps</>} description="We make domestic staff recruitment simple, transparent, and stress-free." background="/images/how-it-works.webp" />
 
       <section className="py-16 lg:py-24">
         <div className="container-x">

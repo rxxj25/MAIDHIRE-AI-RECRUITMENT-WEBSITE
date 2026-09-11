@@ -15,11 +15,9 @@ export default function PricingPage() {
       <div className="relative isolate overflow-hidden bg-[#1f1a15] text-white">
         <div aria-hidden="true" className="absolute inset-0 -z-10">
           <img src="/images/bg-pricing.webp" alt="" className="h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-[#14110d]/15" />
+          <div className="absolute inset-0 bg-[#14110d]/28" />
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-cream-100 to-transparent" />
         </div>
-        <p aria-hidden="true" className="script pointer-events-none absolute left-[3%] top-[26%] hidden rotate-[-12deg] text-[2.1rem] leading-tight text-white/70 xl:block">Trusted Care ♡<br />for Brighter<br />Tomorrows</p>
-        <p aria-hidden="true" className="script pointer-events-none absolute right-[3%] top-[22%] hidden rotate-[8deg] text-right text-[2.1rem] leading-tight text-white/70 xl:block">Better<br />Homes<br />Happier<br />Lives</p>
 
         <div className="container-x pb-24 pt-36 lg:pt-44">
           <SectionHeader eyebrow="Pricing" tone="light" align="center" title={<>Transparent Plans<br />for Your Peace of Mind</>} description="Choose a plan that works best for your home. No hidden charges." />

@@ -30,7 +30,7 @@ export function FieldWrap({ label, error, hint, icon, required, className, child
         )}
       </label>
       <div className="relative">
-        {icon && <span className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-ink-400">{icon}</span>}
+        {icon && <span className="pointer-events-none absolute left-4 top-[17px] text-ink-700">{icon}</span>}
         {children(id, describedBy)}
       </div>
       {error ? (
@@ -58,7 +58,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({ l
           aria-invalid={!!error || undefined}
           aria-describedby={describedBy}
           required={required}
-          className={cn("field", icon && "pl-11", error && "field-error", className)}
+          className={cn("field h-[56px]", icon && "pl-12", error && "field-error", className)}
           {...rest}
         />
       )}
@@ -79,7 +79,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
             aria-describedby={describedBy}
             required={required}
             defaultValue={rest.defaultValue ?? (rest.value === undefined ? "" : undefined)}
-            className={cn("field appearance-none pr-11", icon && "pl-11", error && "field-error", className)}
+            className={cn("field h-[56px] appearance-none pr-11", icon && "pl-12", error && "field-error", className)}
             {...rest}
           >
             {placeholder && (
@@ -109,7 +109,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
             aria-describedby={describedBy}
             required={required}
             maxLength={maxLength}
-            className={cn("field min-h-[140px] resize-y", icon && "pl-11", error && "field-error", className)}
+            className={cn("field min-h-[140px] resize-y", icon && "pl-12", error && "field-error", className)}
             {...rest}
           />
           {maxLength !== undefined && (

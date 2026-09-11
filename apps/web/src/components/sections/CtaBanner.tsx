@@ -24,7 +24,7 @@ export function CtaBanner() {
         </Reveal>
       </div>
       <div className="relative min-h-[300px] lg:min-h-[420px]">
-        <img src="/images/cta-towels.webp" alt="A smiling housekeeper holding a stack of freshly folded white towels" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover object-[50%_20%]" />
+        <img src="/images/cta-towels.webp" alt="A smiling housekeeper holding a stack of freshly folded white towels" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover object-[50%_15%]" />
       </div>
     </Reveal>
   );

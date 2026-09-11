@@ -14,7 +14,7 @@ export default function JoinPage() {
   return (
     <>
       <Seo title="Join as a Candidate" description="Apply to join MaidHire's pool of verified housekeepers, nannies, cooks and caregivers placed with families in the UAE and Saudi Arabia." path="/join" />
-      <PageHeader compact eyebrow="For Candidates" title={<>Work with Families<br />Who Value You</>} description="Join a trusted network of household professionals. Verified placements, fair contracts and support throughout your journey." background="/images/bg-warm.webp" subject="/images/how-it-works.webp" />
+      <PageHeader compact eyebrow="For Candidates" title={<>Work with Families<br />Who Value You</>} description="Join a trusted network of household professionals. Verified placements, fair contracts and support throughout your journey." background="/images/services-header.webp" />
       <section className="py-16 lg:py-24">
         <div className="container-x grid gap-10 lg:grid-cols-[320px_1fr] lg:gap-16">
           <Reveal className="space-y-6 lg:sticky lg:top-28 lg:self-start">

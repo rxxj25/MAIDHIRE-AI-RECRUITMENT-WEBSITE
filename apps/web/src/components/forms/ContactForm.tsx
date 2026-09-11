@@ -46,7 +46,7 @@ export function ContactForm({ defaultService }: { defaultService?: string }) {
       {/* Honeypot — hidden from humans, filled by bots */}
       <input type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" {...register("website")} />
       <FormError message={error} />
-      <Button type="submit" size="lg" arrow loading={submitting} className="w-full rounded-lg text-[1.05rem]">
+      <Button type="submit" size="lg" arrow loading={submitting} className="h-[68px] w-full rounded-lg text-[1.3rem]">
         Send Message
       </Button>
       <p className="text-center text-[0.8rem] text-ink-500">
