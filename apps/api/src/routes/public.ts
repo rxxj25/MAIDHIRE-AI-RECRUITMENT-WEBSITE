@@ -99,12 +99,17 @@ const publicRoutes: FastifyPluginAsync = async (app) => {
     if (!req.isMultipart()) throw badRequest("Expected multipart form data");
 
     let payloadRaw: string | null = null;
+    let payloadParsed: unknown;
     let photo: { buffer: Buffer; mime: string } | null = null;
     const docs: { buffer: Buffer; mime: string; name: string }[] = [];
 
     for await (const part of req.parts({ limits: { files: 5, fileSize: MAX_DOCUMENT_BYTES, fields: 5 } })) {
-      if (part.type === "field" && part.fieldname === "payload") payloadRaw = String(part.value);
-      else if (part.type === "file") {
+      if (part.type === "field" && part.fieldname === "payload") {
+        // @fastify/multipart auto-parses a field whose part carries Content-Type: application/json,
+        // handing back an object instead of a string — accept either shape.
+        if (typeof part.value === "string") payloadRaw = part.value;
+        else payloadParsed = part.value;
+      } else if (part.type === "file") {
         const buffer = await part.toBuffer();
         if (part.file.truncated) throw badRequest("A file exceeds the size limit");
         if (part.fieldname === "photo") {
@@ -119,12 +124,14 @@ const publicRoutes: FastifyPluginAsync = async (app) => {
         }
       }
     }
-    if (!payloadRaw) throw badRequest("Missing form payload");
-    let parsedJson: unknown;
-    try {
-      parsedJson = JSON.parse(payloadRaw);
-    } catch {
-      throw badRequest("Malformed form payload");
+    if (!payloadRaw && payloadParsed === undefined) throw badRequest("Missing form payload");
+    let parsedJson: unknown = payloadParsed;
+    if (payloadRaw) {
+      try {
+        parsedJson = JSON.parse(payloadRaw);
+      } catch {
+        throw badRequest("Malformed form payload");
+      }
     }
     const data = candidateApplicationSchema.parse(parsedJson);
 
