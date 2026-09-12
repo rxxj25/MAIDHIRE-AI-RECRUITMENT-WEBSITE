@@ -135,6 +135,28 @@
     border: 1px solid rgb(255 255 255 / 0.3);
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.25);
   }
+  /* Floating 3D tilt for the circular feature/step/pricing icon badges — parent needs [perspective:900px]. */
+  .icon-badge-3d {
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: transform 0.5s var(--ease-out-quart), box-shadow 0.5s var(--ease-out-quart);
+  }
+  .icon-badge-3d:hover {
+    transform: translateY(-8px) translateZ(10px) rotateX(22deg) rotateY(-22deg) scale(1.08);
+    box-shadow: 0 32px 40px -18px rgb(10 50 41 / 0.5);
+  }
+  /* Floating 3D tilt for whole cards (pricing plans, etc.) — parent needs [perspective:1400px]. */
+  .card-3d {
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: transform 0.5s var(--ease-out-quart), box-shadow 0.5s var(--ease-out-quart);
+  }
+  .card-3d:hover {
+    transform: translateY(-14px) rotateX(6deg) rotateY(-6deg) scale(1.02);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.28),
+      0 50px 80px -24px rgb(0 0 0 / 0.6);
+  }
 }
 
 @layer utilities {

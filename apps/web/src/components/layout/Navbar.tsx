@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { LogOut, Menu, User, X } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
 import { useScrolled } from "@/hooks/useScrolled";
 import { cn } from "@/lib/utils";
 import { easeOut } from "@/lib/motion";
+import { useGuestLogout, useGuestMe } from "@/lib/guestAuth";
 
 export const NAV = [
   { to: "/", label: "Home" },
@@ -25,7 +26,11 @@ export function Navbar() {
   const scrolled = useScrolled(32);
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const reduce = useReducedMotion();
+  const { data: guestData } = useGuestMe();
+  const logout = useGuestLogout();
+  const guest = guestData?.user;
 
   useEffect(() => setOpen(false), [pathname]);
   useEffect(() => {
@@ -71,7 +76,27 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <div className="hidden sm:block">
+          <div className="hidden items-center gap-3 sm:flex">
+            {guest ? (
+              <div className="flex items-center gap-2">
+                <span className="flex items-center gap-2 rounded-full bg-white/10 py-2 pl-3 pr-4 text-[0.9rem] font-medium text-white ring-1 ring-white/20">
+                  <User aria-hidden="true" className="h-4 w-4" />
+                  {guest.name.split(" ")[0]}
+                </span>
+                <button
+                  type="button"
+                  aria-label="Log out"
+                  onClick={() => logout.mutate()}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full text-white/85 transition-colors hover:bg-white/10 hover:text-white"
+                >
+                  <LogOut aria-hidden="true" className="h-4.5 w-4.5" />
+                </button>
+              </div>
+            ) : (
+              <Button to="/login" variant="ghost" size="md" className="!text-white hover:!bg-white/10">
+                Log In
+              </Button>
+            )}
             <Button to="/contact" variant="glass" size="md" className="px-8">
               Contact Us
             </Button>
@@ -112,6 +137,21 @@ export function Navbar() {
                   </NavLink>
                 </motion.li>
               ))}
+              <motion.li variants={{ hidden: { opacity: 0, x: -12 }, visible: { opacity: 1, x: 0 } }}>
+                {guest ? (
+                  <button
+                    type="button"
+                    onClick={() => logout.mutate(undefined, { onSuccess: () => navigate("/") })}
+                    className="flex w-full items-center justify-between border-b border-white/10 py-4 text-lg font-semibold text-white/85"
+                  >
+                    Log Out ({guest.name.split(" ")[0]})
+                  </button>
+                ) : (
+                  <NavLink to="/login" className={({ isActive }) => cn("flex items-center justify-between border-b border-white/10 py-4 text-lg font-semibold text-white/85", isActive && "text-mint-500")}>
+                    Log In
+                  </NavLink>
+                )}
+              </motion.li>
               <motion.li variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }} className="pt-6">
                 <Button to="/contact" variant="accent" size="lg" className="w-full" arrow>
                   Find a Maid

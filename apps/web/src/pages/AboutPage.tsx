@@ -35,8 +35,8 @@ export default function AboutPage() {
           <SectionHeader eyebrow="What We Stand For" serif align="center" title="Our Values" />
           <Reveal as="ul" staggerChildren={0.1} className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {VALUES.map(({ Icon, title, text }) => (
-              <RevealItem as="li" key={title} className="card p-7">
-                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-forest-900 text-white">
+              <RevealItem as="li" key={title} className="card p-7 [perspective:900px]">
+                <span className="icon-badge-3d flex h-12 w-12 items-center justify-center rounded-full bg-forest-900 text-white">
                   <Icon aria-hidden="true" className="h-5.5 w-5.5" strokeWidth={1.7} />
                 </span>
                 <h3 className="mt-5 text-[1.1rem] font-bold text-ink-950">{title}</h3>

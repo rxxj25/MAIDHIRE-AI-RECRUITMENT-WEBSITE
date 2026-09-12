@@ -18,9 +18,12 @@ const ContactPage = lazy(() => import("@/pages/ContactPage"));
 const JoinPage = lazy(() => import("@/pages/JoinPage"));
 const LegalPage = lazy(() => import("@/pages/LegalPage"));
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
+const LoginPage = lazy(() => import("@/pages/LoginPage"));
+const SignupPage = lazy(() => import("@/pages/SignupPage"));
+const ForgotPasswordPage = lazy(() => import("@/pages/ForgotPasswordPage"));
 
 const AdminShell = lazy(() => import("@/components/admin/AdminShell").then((m) => ({ default: m.AdminShell })));
-const LoginPage = lazy(() => import("@/pages/admin/LoginPage"));
+const AdminLoginPage = lazy(() => import("@/pages/admin/LoginPage"));
 const DashboardPage = lazy(() => import("@/pages/admin/DashboardPage"));
 const CandidatesAdminPage = lazy(() => import("@/pages/admin/CandidatesAdminPage"));
 const CandidateAdminDetailPage = lazy(() => import("@/pages/admin/CandidateAdminDetailPage"));
@@ -51,7 +54,10 @@ const router = createBrowserRouter(
       { path: "*", element: <NotFoundPage /> },
     ],
   },
-  { path: "/admin/login", element: <LoginPage /> },
+  { path: "/login", element: <LoginPage /> },
+  { path: "/signup", element: <SignupPage /> },
+  { path: "/forgot-password", element: <ForgotPasswordPage /> },
+  { path: "/admin/login", element: <AdminLoginPage /> },
   {
     path: "/admin",
     element: <AdminShell />,

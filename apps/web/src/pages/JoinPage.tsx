@@ -19,8 +19,8 @@ export default function JoinPage() {
         <div className="container-x grid gap-10 lg:grid-cols-[320px_1fr] lg:gap-16">
           <Reveal className="space-y-6 lg:sticky lg:top-28 lg:self-start">
             {PERKS.map(({ Icon, title, text }) => (
-              <div key={title} className="flex gap-4">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest-900 text-white">
+              <div key={title} className="flex gap-4 [perspective:900px]">
+                <span className="icon-badge-3d flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest-900 text-white">
                   <Icon aria-hidden="true" className="h-5 w-5" strokeWidth={1.7} />
                 </span>
                 <div>

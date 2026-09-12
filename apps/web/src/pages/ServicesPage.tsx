@@ -26,8 +26,8 @@ export default function ServicesPage() {
               <RevealItem className="overflow-hidden rounded-2xl shadow-card">
                 <img src={s.image} alt={s.label} loading="lazy" decoding="async" className="aspect-[16/10] w-full object-cover" />
               </RevealItem>
-              <RevealItem>
-                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-cream-200 text-forest-900">
+              <RevealItem className="[perspective:900px]">
+                <span className="icon-badge-3d flex h-14 w-14 items-center justify-center rounded-full bg-cream-200 text-forest-900">
                   <s.Icon aria-hidden="true" className="h-7 w-7" strokeWidth={1.6} />
                 </span>
                 <h2 className="h-serif mt-5 text-[2.2rem] text-ink-950 sm:text-[2.6rem]">{s.label}</h2>

@@ -86,8 +86,8 @@ export default function CandidateProfilePage() {
               {c.headline && <p className="h-serif text-[1.6rem] text-forest-950 sm:text-[2rem]">{c.headline}</p>}
               <dl className="mt-8 grid gap-x-8 gap-y-5 sm:grid-cols-2">
                 {facts.map(({ Icon, label, value }) => (
-                  <div key={label} className="flex items-start gap-3">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-cream-200 text-forest-900">
+                  <div key={label} className="flex items-start gap-3 [perspective:900px]">
+                    <span className="icon-badge-3d flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-cream-200 text-forest-900">
                       <Icon aria-hidden="true" className="h-5 w-5" strokeWidth={1.7} />
                     </span>
                     <div>

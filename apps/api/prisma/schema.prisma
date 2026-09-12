@@ -70,6 +70,17 @@ model AdminUser {
   statusLogs   CandidateStatusLog[]
 }
 
+/// A family/employer account. Optional — hire requests and messages never require one,
+/// but a signed-up guest can log back in and see the requests they've submitted.
+model GuestUser {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime  @default(now())
+  lastLoginAt  DateTime?
+}
+
 model Candidate {
   id                String          @id @default(uuid())
   slug              String          @unique

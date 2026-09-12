@@ -27,15 +27,15 @@ export function PlanCard({ plan }: { plan: PublicPlan }) {
   const Icon = ICONS[plan.slug] ?? House;
   const price = currency === "AED" ? plan.priceAed : plan.priceSar;
   return (
-    <article className={cn("glass relative flex h-full flex-col overflow-hidden rounded-2xl text-white", plan.isPopular && "border-mint-500/70 lg:-mt-6 lg:mb-[-1px]")} aria-label={`${plan.name} plan`}>
+    <article className={cn("card-3d glass relative flex h-full flex-col overflow-hidden rounded-2xl text-white", plan.isPopular && "border-mint-500/70 lg:-mt-6 lg:mb-[-1px]")} aria-label={`${plan.name} plan`}>
       {plan.isPopular && (
         <div className="flex items-center justify-center gap-2 bg-forest-800 py-2.5 text-[0.95rem] font-semibold text-white">
           <Crown aria-hidden="true" className="h-4 w-4 text-gold-500" />
           Most Popular
         </div>
       )}
-      <div className="flex flex-1 flex-col px-7 pb-8 pt-8 text-center sm:px-8">
-        <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-white/12 text-white">
+      <div className="flex flex-1 flex-col px-7 pb-8 pt-8 text-center sm:px-8 [perspective:900px]">
+        <span className="icon-badge-3d mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-white/12 text-white">
           <Icon aria-hidden="true" className="h-7 w-7" strokeWidth={1.6} />
         </span>
         <h3 className="mt-4 text-[1.9rem] font-extrabold tracking-tight">{plan.name}</h3>
@@ -73,13 +73,13 @@ export function PricingPlans({ plans, loading }: { plans?: PublicPlan[]; loading
         {loading
           ? Array.from({ length: 3 }, (_, i) => <Skeleton key={i} className="h-[560px]" />)
           : plans?.map((p) => (
-              <RevealItem key={p.slug} className="h-full">
+              <RevealItem key={p.slug} className="h-full [perspective:1400px]">
                 <PlanCard plan={p} />
               </RevealItem>
             ))}
       </Reveal>
-      <Reveal className="glass mt-8 flex flex-col items-center gap-6 rounded-2xl px-6 py-6 text-white sm:flex-row sm:px-8">
-        <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/12 text-white">
+      <Reveal className="glass mt-8 flex flex-col items-center gap-6 rounded-2xl px-6 py-6 text-white sm:flex-row sm:px-8 [perspective:900px]">
+        <span className="icon-badge-3d flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/12 text-white">
           <Headset aria-hidden="true" className="h-7 w-7" strokeWidth={1.6} />
         </span>
         <div className="flex-1 text-center sm:text-left">

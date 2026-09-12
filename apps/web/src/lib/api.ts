@@ -16,9 +16,10 @@ export class ApiRequestError extends Error {
 interface Options extends Omit<RequestInit, "body"> {
   body?: unknown;
   admin?: boolean;
+  guest?: boolean;
 }
 
-export async function api<T>(path: string, { body, admin, headers, ...init }: Options = {}): Promise<T> {
+export async function api<T>(path: string, { body, admin, guest, headers, ...init }: Options = {}): Promise<T> {
   const isForm = body instanceof FormData;
   const res = await fetch(`${BASE}${path}`, {
     ...init,
@@ -26,6 +27,7 @@ export async function api<T>(path: string, { body, admin, headers, ...init }: Op
     headers: {
       ...(isForm ? {} : { "Content-Type": "application/json" }),
       ...(admin ? { "X-Requested-With": "maidhire-admin" } : {}),
+      ...(guest ? { "X-Requested-With": "maidhire-guest" } : {}),
       ...headers,
     },
     body: body === undefined ? undefined : isForm ? body : JSON.stringify(body),
@@ -44,6 +46,9 @@ export const post = <T>(path: string, body: unknown, admin = false) => api<T>(pa
 export const patch = <T>(path: string, body: unknown, admin = true) => api<T>(path, { method: "PATCH", body, admin });
 export const put = <T>(path: string, body: unknown, admin = true) => api<T>(path, { method: "PUT", body, admin });
 export const del = <T>(path: string, admin = true) => api<T>(path, { method: "DELETE", admin });
+
+export const getGuest = <T>(path: string) => api<T>(path, { guest: true });
+export const postGuest = <T>(path: string, body: unknown) => api<T>(path, { method: "POST", body, guest: true });
 
 export const qs = (params: Record<string, string | number | boolean | undefined>) => {
   const sp = new URLSearchParams();

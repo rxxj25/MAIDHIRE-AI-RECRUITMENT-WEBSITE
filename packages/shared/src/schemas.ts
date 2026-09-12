@@ -131,6 +131,24 @@ export const candidateQuerySchema = z.object({
 });
 export type CandidateQuery = z.infer<typeof candidateQuerySchema>;
 
+/* ---------- guest (family/employer) accounts ---------- */
+
+export const guestSignupSchema = z
+  .object({
+    name: personName,
+    email,
+    password: z.string().min(8, "Use at least 8 characters").max(128),
+    confirmPassword: z.string().min(8).max(128),
+  })
+  .refine((d) => d.password === d.confirmPassword, { message: "Passwords do not match", path: ["confirmPassword"] });
+export type GuestSignupInput = z.infer<typeof guestSignupSchema>;
+
+export const guestLoginSchema = z.object({
+  email,
+  password: z.string().min(1, "Enter your password").max(128),
+});
+export type GuestLoginInput = z.infer<typeof guestLoginSchema>;
+
 /* ---------- admin ---------- */
 
 export const adminLoginSchema = z.object({

@@ -10,6 +10,7 @@ import { errorHandler } from "./lib/errors.js";
 import authPlugin from "./plugins/auth.js";
 import publicRoutes from "./routes/public.js";
 import adminRoutes from "./routes/admin.js";
+import guestRoutes from "./routes/guest.js";
 import { localRoot } from "./services/storage.js";
 
 export async function buildApp() {
@@ -45,6 +46,7 @@ export async function buildApp() {
   app.setErrorHandler(errorHandler);
   app.get("/health", async () => ({ ok: true, ts: new Date().toISOString() }));
   await app.register(publicRoutes, { prefix: "/api" });
+  await app.register(guestRoutes, { prefix: "/api" });
   await app.register(adminRoutes, { prefix: "/api/admin" });
 
   return app;

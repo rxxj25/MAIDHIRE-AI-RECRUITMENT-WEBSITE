@@ -6,8 +6,8 @@ export function Steps() {
   return (
     <Reveal as="ol" staggerChildren={0.12} className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-forest-900/12">
       {STEPS.map(({ n, Icon, title, text }) => (
-        <RevealItem as="li" key={n} className="flex flex-col items-center px-4 text-center">
-          <span className="flex h-24 w-24 items-center justify-center rounded-full bg-forest-900 text-white shadow-[0_16px_30px_-16px_rgb(10_50_41/0.8)]">
+        <RevealItem as="li" key={n} className="flex flex-col items-center px-4 text-center [perspective:900px]">
+          <span className="icon-badge-3d flex h-24 w-24 items-center justify-center rounded-full bg-forest-900 text-white shadow-[0_16px_30px_-16px_rgb(10_50_41/0.8)]">
             <Icon aria-hidden="true" className="h-10 w-10" strokeWidth={1.6} />
           </span>
           <span className="mt-4 text-4xl font-extrabold tracking-tight text-forest-950" aria-hidden="true">

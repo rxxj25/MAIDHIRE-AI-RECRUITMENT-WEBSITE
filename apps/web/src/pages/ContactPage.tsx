@@ -68,8 +68,8 @@ export default function ContactPage() {
             </RevealItem>
             <RevealItem as="ul" className="mt-8 space-y-4">
               {details.map(({ Icon, main, sub, href }) => (
-                <li key={main} className="flex items-center gap-4">
-                  <span className="flex h-[58px] w-[58px] shrink-0 items-center justify-center rounded-full bg-forest-900 text-white">
+                <li key={main} className="flex items-center gap-4 [perspective:900px]">
+                  <span className="icon-badge-3d flex h-[58px] w-[58px] shrink-0 items-center justify-center rounded-full bg-forest-900 text-white">
                     <Icon aria-hidden="true" className="h-6 w-6" strokeWidth={1.9} />
                   </span>
                   <div>
