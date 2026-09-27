@@ -48,18 +48,19 @@ flowchart TB
         telephony["Twilio Voice / Vapi.ai\n(speech in, speech out)"]
     end
 
-    web["apps/web\nReact 18 + Vite SPA\n(Vercel)"]
-
-    subgraph backend["apps/api — Fastify (Render)"]
-        pub["Public routes\ncontact · hire requests · candidates · plans"]
-        auth["Admin + candidate auth\ncookie JWT, argon2"]
-        chatsvc["Chat service\nGemini RAG"]
-        voicesvc["Voice service\nanswerReceptionistTurn()"]
+    subgraph vercel["One Vercel project"]
+        web["apps/web\nReact 18 + Vite SPA\n(static build)"]
+        subgraph backend["/api/* — Fastify, as a serverless function"]
+            pub["Public routes\ncontact · hire requests · candidates · plans"]
+            auth["Admin + candidate auth\ncookie JWT, argon2"]
+            chatsvc["Chat service\nGemini RAG"]
+            voicesvc["Voice service\nanswerReceptionistTurn()"]
+        end
     end
 
-    langflow["Langflow flow\n'MaidHire Voice Receptionist'\n(Groq LLM + per-call memory)"]
+    langflow["Langflow flow\n'MaidHire Voice Receptionist'\n(Groq LLM + per-call memory)\nhosted on Railway"]
     db[("PostgreSQL\nvia Prisma")]
-    storage[("File storage\nlocal disk / S3-compatible")]
+    storage[("File storage\nS3-compatible (R2/S3)")]
 
     family -->|browse, hire request, chat| web
     candidate -->|apply, check status| web
@@ -87,7 +88,7 @@ flowchart TB
 | Shared | Zod schemas/types shared between client and server (`packages/shared`) |
 | AI — chat | Google Gemini (`gemini-2.5-flash` generation, `gemini-embedding-001` retrieval) |
 | AI — voice | Langflow (flow orchestration + per-call memory) → Groq (inference), fronted by Twilio Voice or Vapi.ai |
-| Infra | Vercel (frontend), Render (API + Postgres, containerized via Docker), S3-compatible object storage for uploads |
+| Infra | Vercel (one project — static frontend + `/api/*` as a serverless function), Postgres (Vercel Postgres/Neon or similar), Railway (Langflow), S3-compatible object storage for uploads |
 
 ## Monorepo layout
 
@@ -139,17 +140,23 @@ See `apps/api/.env.example` (all keys documented) and `apps/web/.env.example`.
 | `LANGFLOW_API_URL`, `LANGFLOW_API_KEY`, `LANGFLOW_FLOW_ID` | The Langflow instance/flow behind the voice receptionist |
 | `TWILIO_AUTH_TOKEN` | Verifies `/api/voice/*` webhooks really came from Twilio |
 | `VAPI_SERVER_SECRET` | Shared secret verifying `/api/vapi/chat/completions` requests really came from Vapi |
-| `VITE_API_URL` | (web) API base URL in production, e.g. `https://api.maidhire.com` |
+| `VITE_API_URL` | (web) API base URL — leave empty when web + API share one Vercel project/domain (same-origin); only set this if the API is hosted on a separate origin |
 | `VITE_WHATSAPP_NUMBER` | (web) WhatsApp click-to-chat number, digits only |
 | `VITE_VOICE_NUMBER` | (web) AI receptionist phone number shown on the Contact page, digits only |
 
 ## Deployment
 
-- **Web** → **Vercel**: build `npm run build -w apps/web`, output `apps/web/dist`. `apps/web/vercel.json` handles SPA rewrites, cache headers, and proxies `/api/*` + `/files/*` to the deployed API so auth cookies stay same-origin. Set `VITE_VOICE_NUMBER` / `VITE_WHATSAPP_NUMBER`.
-- **API** → **Render** (Docker): `apps/api/Dockerfile` builds from the repo root and runs `prisma migrate deploy` automatically on boot. Set `COOKIE_SECURE=true`, `CORS_ORIGINS=https://maidhire.com`, `STORAGE_DRIVER=s3`.
-- **Voice AI** → Langflow deployed as its own always-on service (pointed at its own Postgres via `LANGFLOW_DATABASE_URL` for persistence), with `LANGFLOW_API_URL`/`LANGFLOW_API_KEY`/`LANGFLOW_FLOW_ID` on the API pointing at it. The phone number's webhook (Twilio "A call comes in", or Vapi's assistant → Custom LLM) points at the deployed API's `/api/voice/incoming` or `/api/vapi/chat/completions`.
-- **Database** → Neon / Supabase Postgres / Render Postgres / RDS.
-- **Files** → Cloudflare R2 (S3-compatible). For private documents, front the bucket with signed URLs (the storage adapter is the single place to change).
+Web and API deploy as **one Vercel project**, rooted at the repo root:
+
+- `vercel.json` (repo root) builds `packages/shared` then `apps/web` (static output `apps/web/dist`), runs `prisma generate` + `prisma migrate deploy` against `apps/api/prisma/schema.prisma`, and rewrites everything except `/api/*` and `/files/*` to `index.html` (SPA routing).
+- `/api/[...path].ts` (repo root) is the serverless entry point: it builds the Fastify app once per warm container (`buildApp()` from `apps/api/src/app.ts`, which never calls `.listen()`) and forwards each request into it via `app.server.emit("request", ...)` — the same routing/plugin pipeline Fastify normally uses, without needing a persistently-open port.
+- Because web and API share one domain, auth cookies are same-origin — no CORS or `SameSite=None` juggling needed. `VITE_API_URL` stays empty, same as local dev (Vite's own proxy) and matching `apps/web/src/lib/api.ts`'s default.
+- **Storage must be `STORAGE_DRIVER=s3`** (Cloudflare R2 or similar) — Vercel functions have no persistent disk, so `STORAGE_DRIVER=local` will silently lose every upload. Set `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_ENDPOINT`, `S3_PUBLIC_URL`.
+- **Database** → any Postgres reachable from Vercel's build + runtime (Vercel Postgres/Neon, Supabase, etc.) — set `DATABASE_URL` as a project env var (available at both build time, for the migration step, and runtime).
+- Set `COOKIE_SECURE=true`, `CORS_ORIGINS=https://<your-vercel-domain>`, `JWT_SECRET` (fresh, ≥32 chars), plus the AI keys below.
+- **Voice AI** → Langflow doesn't fit a serverless platform (it's a persistent Python service with its own DB) — it runs as its own always-on service (e.g. Railway's official Langflow template), pointed at its own Postgres via `LANGFLOW_DATABASE_URL` for persistence. Set `LANGFLOW_API_URL`/`LANGFLOW_API_KEY`/`LANGFLOW_FLOW_ID` on the Vercel project to point at it. The phone number's webhook (Twilio "A call comes in", or Vapi's assistant → Custom LLM) points at the deployed API's `/api/voice/incoming` or `/api/vapi/chat/completions`.
+
+Rate limiting note: `@fastify/rate-limit`'s default store is in-memory, which doesn't persist across serverless invocations/cold starts — limits become best-effort rather than strict on this hosting model. Not a concern on a persistent host (Render/Docker, still supported via `apps/api/Dockerfile` if preferred over Vercel for the API).
 
 ## Scripts
 
