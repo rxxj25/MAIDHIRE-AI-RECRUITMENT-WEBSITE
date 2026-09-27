@@ -90,7 +90,10 @@ model Candidate {
   displayName       String
   headline          String?
   bio               String?
-  email             String?
+  email             String?         @unique
+  /// Set when the candidate applies (application doubles as signup) so they can log back in
+  /// and see their own pipeline status. Null for candidates only ever created via admin/seed.
+  passwordHash      String?
   phone             String
   whatsapp          String?
   dateOfBirth       DateTime

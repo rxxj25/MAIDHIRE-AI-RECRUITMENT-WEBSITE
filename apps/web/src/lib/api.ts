@@ -17,9 +17,10 @@ interface Options extends Omit<RequestInit, "body"> {
   body?: unknown;
   admin?: boolean;
   guest?: boolean;
+  candidate?: boolean;
 }
 
-export async function api<T>(path: string, { body, admin, guest, headers, ...init }: Options = {}): Promise<T> {
+export async function api<T>(path: string, { body, admin, guest, candidate, headers, ...init }: Options = {}): Promise<T> {
   const isForm = body instanceof FormData;
   const res = await fetch(`${BASE}${path}`, {
     ...init,
@@ -28,6 +29,7 @@ export async function api<T>(path: string, { body, admin, guest, headers, ...ini
       ...(isForm ? {} : { "Content-Type": "application/json" }),
       ...(admin ? { "X-Requested-With": "maidhire-admin" } : {}),
       ...(guest ? { "X-Requested-With": "maidhire-guest" } : {}),
+      ...(candidate ? { "X-Requested-With": "maidhire-candidate" } : {}),
       ...headers,
     },
     body: body === undefined ? undefined : isForm ? body : JSON.stringify(body),
@@ -49,6 +51,9 @@ export const del = <T>(path: string, admin = true) => api<T>(path, { method: "DE
 
 export const getGuest = <T>(path: string) => api<T>(path, { guest: true });
 export const postGuest = <T>(path: string, body: unknown) => api<T>(path, { method: "POST", body, guest: true });
+
+export const getCandidate = <T>(path: string) => api<T>(path, { candidate: true });
+export const postCandidate = <T>(path: string, body: unknown) => api<T>(path, { method: "POST", body, candidate: true });
 
 export const qs = (params: Record<string, string | number | boolean | undefined>) => {
   const sp = new URLSearchParams();

@@ -72,48 +72,62 @@ export const hireRequestSchema = z.object({
 });
 export type HireRequestInput = z.infer<typeof hireRequestSchema>;
 
-/** Candidate self-registration (text part; files are handled as multipart alongside). */
-export const candidateApplicationSchema = z.object({
-  firstName: personName,
-  lastName: personName,
-  email: email.optional().or(z.literal("")),
-  phone: gulfPhone,
-  whatsapp: gulfPhone.optional().or(z.literal("")),
-  dateOfBirth: z
-    .string()
-    .refine((d) => {
-      const dob = new Date(d);
-      if (Number.isNaN(dob.getTime())) return false;
-      const age = (Date.now() - dob.getTime()) / (365.25 * 24 * 3600 * 1000);
-      return age >= 21 && age <= 60;
-    }, "Candidates must be between 21 and 60 years old"),
-  nationality,
-  currentCountry: countryCode,
-  currentCity: city,
-  primaryService: serviceSlug,
-  skills: z.array(z.enum(SKILLS)).min(1, "Select at least one skill").max(8),
-  languages: z.array(z.enum(LANGUAGES)).min(1, "Select at least one language").max(6),
-  yearsExperience: z.coerce.number().int().min(0).max(40),
-  experienceSummary: z.string().trim().min(30, "Please describe your experience (30+ characters)").max(1500),
-  availability,
-  expectedSalary: z.coerce.number().int().min(500).max(20000),
-  salaryCurrency: z.enum(["AED", "SAR"]),
-  hasGulfExperience: z.boolean().default(false),
-  liveInPreferred: z.boolean().default(true),
-  references: z
-    .array(
-      z.object({
-        name: personName,
-        relation: z.string().trim().min(2).max(60),
-        phone: gulfPhone,
-      }),
-    )
-    .max(3)
-    .default([]),
-  consent: z.literal(true, { errorMap: () => ({ message: "Please accept the terms" }) }),
-  website: honeypot,
-});
+/**
+ * Candidate self-registration (text part; files are handled as multipart alongside).
+ * Applying doubles as signup: the password set here becomes their login credential, so they
+ * can come back later and see their own pipeline status.
+ */
+export const candidateApplicationSchema = z
+  .object({
+    firstName: personName,
+    lastName: personName,
+    email,
+    password: z.string().min(8, "Use at least 8 characters").max(128),
+    confirmPassword: z.string().min(8).max(128),
+    phone: gulfPhone,
+    whatsapp: gulfPhone.optional().or(z.literal("")),
+    dateOfBirth: z
+      .string()
+      .refine((d) => {
+        const dob = new Date(d);
+        if (Number.isNaN(dob.getTime())) return false;
+        const age = (Date.now() - dob.getTime()) / (365.25 * 24 * 3600 * 1000);
+        return age >= 21 && age <= 60;
+      }, "Candidates must be between 21 and 60 years old"),
+    nationality,
+    currentCountry: countryCode,
+    currentCity: city,
+    primaryService: serviceSlug,
+    skills: z.array(z.enum(SKILLS)).min(1, "Select at least one skill").max(8),
+    languages: z.array(z.enum(LANGUAGES)).min(1, "Select at least one language").max(6),
+    yearsExperience: z.coerce.number().int().min(0).max(40),
+    experienceSummary: z.string().trim().min(30, "Please describe your experience (30+ characters)").max(1500),
+    availability,
+    expectedSalary: z.coerce.number().int().min(500).max(20000),
+    salaryCurrency: z.enum(["AED", "SAR"]),
+    hasGulfExperience: z.boolean().default(false),
+    liveInPreferred: z.boolean().default(true),
+    references: z
+      .array(
+        z.object({
+          name: personName,
+          relation: z.string().trim().min(2).max(60),
+          phone: gulfPhone,
+        }),
+      )
+      .max(3)
+      .default([]),
+    consent: z.literal(true, { errorMap: () => ({ message: "Please accept the terms" }) }),
+    website: honeypot,
+  })
+  .refine((d) => d.password === d.confirmPassword, { message: "Passwords do not match", path: ["confirmPassword"] });
 export type CandidateApplicationInput = z.infer<typeof candidateApplicationSchema>;
+
+export const candidateLoginSchema = z.object({
+  email,
+  password: z.string().min(1, "Enter your password").max(128),
+});
+export type CandidateLoginInput = z.infer<typeof candidateLoginSchema>;
 
 /* ---------- public queries ---------- */
 
@@ -203,3 +217,14 @@ export const paginationSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(100).default(20),
 });
+
+/* ---------- chatbot ---------- */
+
+export const chatMessageSchema = z.object({
+  message: z.string().trim().min(1, "Say something first").max(800, "Keep it under 800 characters"),
+  history: z
+    .array(z.object({ role: z.enum(["user", "bot"]), text: z.string().max(800) }))
+    .max(10)
+    .default([]),
+});
+export type ChatMessageInput = z.infer<typeof chatMessageSchema>;

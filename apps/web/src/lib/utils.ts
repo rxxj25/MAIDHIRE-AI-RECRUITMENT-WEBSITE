@@ -17,6 +17,10 @@ export const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER ?? "97150123
 export const whatsappLink = (text?: string) =>
   `https://wa.me/${WHATSAPP_NUMBER}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
 
+/** The Twilio number wired to the AI phone receptionist (apps/api/src/routes/voice.ts). Unset until that's configured. */
+export const VOICE_NUMBER = import.meta.env.VITE_VOICE_NUMBER ?? "";
+export const voiceCallLink = () => `tel:${VOICE_NUMBER}`;
+
 export const SITE = {
   name: "MaidHire",
   phoneAe: "+971 50 123 4567",

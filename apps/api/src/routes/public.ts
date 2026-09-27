@@ -6,6 +6,7 @@ import {
   MAX_IMAGE_BYTES,
   candidateApplicationSchema,
   candidateQuerySchema,
+  chatMessageSchema,
   contactMessageSchema,
   hireRequestSchema,
   type PublicPlan,
@@ -14,8 +15,10 @@ import {
 import sharp from "sharp";
 import { prisma } from "../lib/prisma.js";
 import { badRequest, notFound } from "../lib/errors.js";
+import { CANDIDATE_COOKIE_NAME, candidateCookieOptions, hashPassword, signCandidateToken } from "../lib/auth.js";
 import { candidateSlug, displayName, hashIp } from "../lib/util.js";
 import { searchPublic, toPublic, toPublicDetail } from "../services/candidates.js";
+import { answerQuestion } from "../services/chatbot.js";
 import { sendMail, templates } from "../services/email.js";
 import { storage } from "../services/storage.js";
 import { env } from "../lib/env.js";
@@ -135,6 +138,9 @@ const publicRoutes: FastifyPluginAsync = async (app) => {
     }
     const data = candidateApplicationSchema.parse(parsedJson);
 
+    const existing = await prisma.candidate.findUnique({ where: { email: data.email }, select: { id: true } });
+    if (existing) throw badRequest("An account with this email already exists", { email: "Already registered" });
+
     const store = await storage();
     let photoUrl: string | null = null;
     if (photo) {
@@ -144,11 +150,12 @@ const publicRoutes: FastifyPluginAsync = async (app) => {
       photoUrl = (await store.put(webp, { folder: "photos", ext: "webp", contentType: "image/webp", isPublic: true })).url;
     }
 
-    const { consent: _c, website: _w, references, email, whatsapp, ...rest } = data;
+    const { consent: _c, website: _w, references, whatsapp, password, confirmPassword: _cp, ...rest } = data;
+    const passwordHash = await hashPassword(password);
     const candidate = await prisma.candidate.create({
       data: {
         ...rest,
-        email: email || null,
+        passwordHash,
         whatsapp: whatsapp || null,
         dateOfBirth: new Date(data.dateOfBirth),
         slug: candidateSlug(data.firstName, data.lastName),
@@ -171,7 +178,18 @@ const publicRoutes: FastifyPluginAsync = async (app) => {
     if (env.NOTIFY_EMAIL) {
       void sendMail({ to: env.NOTIFY_EMAIL, subject: `New candidate application — ${data.firstName} ${data.lastName}`, html: templates.newApplication(data) }, req.log);
     }
+
+    // Applying doubles as signup: log the candidate straight in so they land on their own status page.
+    const token = await signCandidateToken({ sub: candidate.id, email: candidate.email!, name: candidate.displayName });
+    reply.setCookie(CANDIDATE_COOKIE_NAME, token, candidateCookieOptions);
     return reply.status(201).send({ id: candidate.id });
+  });
+
+  /* ---- AI chatbot (RAG over site content, Gemini) ---- */
+  app.post("/chat", { config: { rateLimit: { max: 15, timeWindow: "1 minute" } } }, async (req) => {
+    const { message, history } = chatMessageSchema.parse(req.body);
+    const { reply, fallback } = await answerQuestion(message, history);
+    return { reply, fallback };
   });
 };
 

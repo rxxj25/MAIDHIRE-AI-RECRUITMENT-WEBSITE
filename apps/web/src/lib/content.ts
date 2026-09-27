@@ -1,4 +1,4 @@
-import { Baby, CalendarDays, ChefHat, HeartHandshake, House, UserRound, ShieldCheck, Users, HeartPulse, Sparkles, ClipboardList, CalendarCheck, BadgeCheck } from "lucide-react";
+import { Baby, CalendarDays, ChefHat, HeartHandshake, House, UserRound, ShieldCheck, Users, HeartPulse, Handshake, ClipboardList, CalendarCheck, BadgeCheck } from "lucide-react";
 
 /** Static marketing content that mirrors the mockups, adapted for the UAE/KSA market. */
 
@@ -27,7 +27,7 @@ export const TRUST_PILLARS = [
   { Icon: ShieldCheck, title: "Verified Candidates", text: "Identity, references and background-checked." },
   { Icon: Users, title: "Trained & Experienced", text: "Skilled professionals with proven Gulf experience." },
   { Icon: HeartPulse, title: "Safe & Trustworthy", text: "Medical fitness & police clearance support." },
-  { Icon: Sparkles, title: "Personalised Matching", text: "Hand-picked for your family's needs." },
+  { Icon: Handshake, title: "Personalised Matching", text: "Hand-picked for your family's needs." },
 ];
 
 export const STEPS = [

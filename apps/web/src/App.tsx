@@ -16,6 +16,7 @@ const CandidateProfilePage = lazy(() => import("@/pages/CandidateProfilePage"));
 const PricingPage = lazy(() => import("@/pages/PricingPage"));
 const ContactPage = lazy(() => import("@/pages/ContactPage"));
 const JoinPage = lazy(() => import("@/pages/JoinPage"));
+const CandidateStatusPage = lazy(() => import("@/pages/CandidateStatusPage"));
 const LegalPage = lazy(() => import("@/pages/LegalPage"));
 const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
 const LoginPage = lazy(() => import("@/pages/LoginPage"));
@@ -30,6 +31,8 @@ const CandidateAdminDetailPage = lazy(() => import("@/pages/admin/CandidateAdmin
 const RequestsAdminPage = lazy(() => import("@/pages/admin/RequestsAdminPage"));
 const MessagesAdminPage = lazy(() => import("@/pages/admin/MessagesAdminPage"));
 const PlansAdminPage = lazy(() => import("@/pages/admin/PlansAdminPage"));
+const ReportsPage = lazy(() => import("@/pages/admin/ReportsPage"));
+const SettingsPage = lazy(() => import("@/pages/admin/SettingsPage"));
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } },
@@ -49,6 +52,7 @@ const router = createBrowserRouter(
       { path: "/pricing", element: <PricingPage /> },
       { path: "/contact", element: <ContactPage /> },
       { path: "/join", element: <JoinPage /> },
+      { path: "/candidate/status", element: <CandidateStatusPage /> },
       { path: "/privacy", element: <LegalPage kind="privacy" /> },
       { path: "/terms", element: <LegalPage kind="terms" /> },
       { path: "*", element: <NotFoundPage /> },
@@ -68,6 +72,8 @@ const router = createBrowserRouter(
       { path: "requests", element: <RequestsAdminPage /> },
       { path: "messages", element: <MessagesAdminPage /> },
       { path: "plans", element: <PlansAdminPage /> },
+      { path: "reports", element: <ReportsPage /> },
+      { path: "settings", element: <SettingsPage /> },
     ],
   },
   ],

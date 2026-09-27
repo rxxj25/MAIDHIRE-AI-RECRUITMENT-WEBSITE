@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { WhatsAppFloat } from "./WhatsAppFloat";
+import { ChatWidget } from "./ChatWidget";
 import { useLenis } from "@/hooks/useLenis";
 import { pageTransition } from "@/lib/motion";
 import { Spinner } from "@/components/ui/Spinner";
@@ -29,6 +30,7 @@ export function Layout() {
       </AnimatePresence>
       <Footer />
       <WhatsAppFloat />
+      <ChatWidget />
     </div>
   );
 }

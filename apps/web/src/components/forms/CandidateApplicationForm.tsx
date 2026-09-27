@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Upload } from "lucide-react";
 import { ACCEPTED_DOCUMENT_TYPES, ACCEPTED_IMAGE_TYPES, AVAILABILITY, AVAILABILITY_LABELS, CITIES, COUNTRIES, LANGUAGES, MAX_DOCUMENT_BYTES, MAX_IMAGE_BYTES, NATIONALITIES, SERVICE_TYPES, SKILLS, candidateApplicationSchema, type CandidateApplicationInput } from "@maidhire/shared";
 import { Checkbox, FormError, FormSuccess, Input, Select, Textarea } from "@/components/ui/Form";
@@ -71,6 +72,7 @@ export function CandidateApplicationForm() {
   });
   const refs = useFieldArray({ control, name: "references" });
   const { submitting, success, error, run } = useSubmit(setError);
+  const qc = useQueryClient();
   const [photo, setPhoto] = useState<File | null>(null);
   const [docs, setDocs] = useState<File[]>([]);
   const [fileErr, setFileErr] = useState<{ photo?: string; documents?: string }>({});
@@ -90,6 +92,10 @@ export function CandidateApplicationForm() {
     return (
       <FormSuccess title="Application received">
         <p>Thank you for applying. Our recruitment team will review your profile and contact you on WhatsApp or phone within 3 working days.</p>
+        <p className="mt-4">You&apos;re signed in — track your status anytime.</p>
+        <Button to="/candidate/status" variant="primary" size="lg" arrow className="mt-4">
+          View My Application Status
+        </Button>
       </FormSuccess>
     );
   }
@@ -103,7 +109,12 @@ export function CandidateApplicationForm() {
         fd.append("payload", JSON.stringify(data));
         if (photo) fd.append("photo", photo);
         for (const d of docs) fd.append("documents", d);
-        return run(() => api("/api/candidates/apply", { method: "POST", body: fd }));
+        return run(async () => {
+          const res = await api("/api/candidates/apply", { method: "POST", body: fd });
+          // Applying doubles as signup — the API just logged them in; refresh the cached session.
+          void qc.invalidateQueries({ queryKey: ["candidate"] });
+          return res;
+        });
       })}
       className="space-y-8"
     >
@@ -114,7 +125,7 @@ export function CandidateApplicationForm() {
           <Input label="Last name" required autoComplete="family-name" error={errors.lastName?.message} {...register("lastName")} />
           <Input label="Mobile number" required type="tel" inputMode="tel" placeholder="+971 5X XXX XXXX" error={errors.phone?.message} {...register("phone")} />
           <Input label="WhatsApp number" type="tel" inputMode="tel" hint="If different from mobile" error={errors.whatsapp?.message} {...register("whatsapp")} />
-          <Input label="Email" type="email" inputMode="email" error={errors.email?.message} {...register("email")} />
+          <Input label="Email" required type="email" inputMode="email" hint="Also your login for checking your status later" error={errors.email?.message} {...register("email")} />
           <Input label="Date of birth" required type="date" error={errors.dateOfBirth?.message} {...register("dateOfBirth")} />
           <Select label="Nationality" required placeholder="Select nationality" error={errors.nationality?.message} {...register("nationality")}>
             {NATIONALITIES.map((n) => (
@@ -137,6 +148,15 @@ export function CandidateApplicationForm() {
               </option>
             ))}
           </Select>
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="h-serif text-2xl text-ink-950">Create your login</h2>
+        <p className="text-[0.9rem] text-ink-500">Applying creates your MaidHire account — use this password to log back in and check your status.</p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Input label="Password" required type="password" autoComplete="new-password" error={errors.password?.message} {...register("password")} />
+          <Input label="Confirm password" required type="password" autoComplete="new-password" error={errors.confirmPassword?.message} {...register("confirmPassword")} />
         </div>
       </section>
 

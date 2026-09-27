@@ -3,6 +3,7 @@ import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
 import cookie from "@fastify/cookie";
 import multipart from "@fastify/multipart";
+import formbody from "@fastify/formbody";
 import rateLimit from "@fastify/rate-limit";
 import fastifyStatic from "@fastify/static";
 import { env } from "./lib/env.js";
@@ -11,6 +12,9 @@ import authPlugin from "./plugins/auth.js";
 import publicRoutes from "./routes/public.js";
 import adminRoutes from "./routes/admin.js";
 import guestRoutes from "./routes/guest.js";
+import candidateRoutes from "./routes/candidate.js";
+import voiceRoutes from "./routes/voice.js";
+import vapiRoutes from "./routes/vapi.js";
 import { localRoot } from "./services/storage.js";
 
 export async function buildApp() {
@@ -35,6 +39,7 @@ export async function buildApp() {
   });
   await app.register(cookie);
   await app.register(multipart);
+  await app.register(formbody); // Twilio webhooks post application/x-www-form-urlencoded
   await app.register(rateLimit, { global: true, max: 120, timeWindow: "1 minute" });
   await app.register(authPlugin);
 
@@ -47,7 +52,10 @@ export async function buildApp() {
   app.get("/health", async () => ({ ok: true, ts: new Date().toISOString() }));
   await app.register(publicRoutes, { prefix: "/api" });
   await app.register(guestRoutes, { prefix: "/api" });
+  await app.register(candidateRoutes, { prefix: "/api/candidate" });
   await app.register(adminRoutes, { prefix: "/api/admin" });
+  await app.register(voiceRoutes, { prefix: "/api/voice" });
+  await app.register(vapiRoutes, { prefix: "/api/vapi" });
 
   return app;
 }

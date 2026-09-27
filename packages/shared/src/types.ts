@@ -62,6 +62,13 @@ export interface PublicTestimonial {
 
 export interface AdminStats {
   candidates: { total: number; byStatus: Record<string, number> };
-  requests: { total: number; new: number; last30Days: number };
+  requests: { total: number; new: number; last30Days: number; byStatus: Record<string, number> };
   messages: { total: number; unread: number };
+  hires: { total: number };
+  /** % change vs the preceding 30-day period; null when there's no prior-period data to compare against. */
+  deltas: { requests30d: number | null; candidates30d: number | null; messages30d: number | null; hires30d: number | null };
+  /** Daily hire-request counts for the last 30 days, oldest first — slice the tail for a shorter window. */
+  trend: { date: string; count: number }[];
+  /** Requests currently being matched or interviewed, most recently updated first. */
+  interviewPipeline: { id: string; fullName: string; service: string; city: string; status: string; startDate: string | null }[];
 }

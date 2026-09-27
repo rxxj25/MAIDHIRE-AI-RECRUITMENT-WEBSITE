@@ -1,13 +1,16 @@
 import { useSearchParams } from "react-router-dom";
-import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Youtube } from "lucide-react";
+import { Facebook, Headset, Instagram, Linkedin, Mail, MapPin, Phone, Youtube } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Seo } from "@/components/ui/Seo";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { HireRequestForm } from "@/components/forms/HireRequestForm";
 import { usePlans } from "@/lib/queries";
-import { SITE, cn } from "@/lib/utils";
+import { SITE, VOICE_NUMBER, voiceCallLink, cn } from "@/lib/utils";
 import { Reveal, RevealItem } from "@/components/ui/Reveal";
 import { easeOut } from "@/lib/motion";
+
+/** Display formatting only — voiceCallLink() builds the tel: href from the raw VITE_VOICE_NUMBER digits. */
+const VOICE_NUMBER_DISPLAY = "+1 (302) 754-2026";
 
 const social = [
   { href: SITE.social.instagram, label: "Instagram", Icon: Instagram },
@@ -24,18 +27,20 @@ export default function ContactPage() {
   const [params, setParams] = useSearchParams();
   const plan = params.get("plan") ?? undefined;
   const service = params.get("service") ?? undefined;
-  const mode: "message" | "request" = params.get("mode") === "request" || plan || service ? "request" : "message";
+  const modeParam = params.get("mode");
+  const mode: "message" | "request" = modeParam === "request" || plan || service ? "request" : "message";
   const { data: plans } = usePlans();
   const reduce = useReducedMotion();
 
   const setMode = (m: "message" | "request") => {
     const sp = new URLSearchParams(params);
-    if (m === "message") ["plan", "service", "mode"].forEach((k) => sp.delete(k));
-    else sp.set("mode", "request");
+    ["plan", "service", "mode"].forEach((k) => sp.delete(k));
+    if (m !== "message") sp.set("mode", m);
     setParams(sp, { replace: true });
   };
 
   const details = [
+    ...(VOICE_NUMBER ? [{ Icon: Headset, main: VOICE_NUMBER_DISPLAY, sub: "AI voice receptionist · answers 24/7", href: voiceCallLink() }] : []),
     { Icon: Phone, main: SITE.phoneAe, sub: `UAE · ${SITE.hours}`, href: `tel:${SITE.phoneAe.replace(/\s/g, "")}` },
     { Icon: Phone, main: SITE.phoneSa, sub: `KSA · ${SITE.hours}`, href: `tel:${SITE.phoneSa.replace(/\s/g, "")}` },
     { Icon: Mail, main: SITE.email, sub: "We respond within 24 hours", href: `mailto:${SITE.email}` },
@@ -112,7 +117,9 @@ export default function ContactPage() {
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
                 <h2 className="h-serif text-[2.2rem] text-ink-950 sm:text-[2.7rem]">{mode === "message" ? "Send Us a Message" : "Request a Hire"}</h2>
-                <p className="text-[1.05rem] text-ink-700">{mode === "message" ? "Fill out the form and we'll get back to you soon." : "Tell us about your household. A consultant will call within 24 hours."}</p>
+                <p className="text-[1.05rem] text-ink-700">
+                  {mode === "message" ? "Fill out the form and we'll get back to you soon." : "Tell us about your household. A consultant will call within 24 hours."}
+                </p>
               </div>
               <div role="tablist" aria-label="Contact type" className="inline-flex rounded-full bg-cream-200 p-1">
                 {(["message", "request"] as const).map((m) => (

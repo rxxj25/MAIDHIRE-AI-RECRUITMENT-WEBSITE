@@ -45,20 +45,86 @@ const adminRoutes: FastifyPluginAsync = async (app) => {
 
     /* ---- dashboard ---- */
     priv.get("/stats", async (): Promise<AdminStats> => {
-      const since = new Date(Date.now() - 30 * 24 * 3600 * 1000);
-      const byStatus = await prisma.candidate.groupBy({ by: ["status"], _count: { _all: true } });
-      const [candTotal, reqTotal, reqNew, req30, msgTotal, msgUnread] = await prisma.$transaction([
+      const DAY = 24 * 3600 * 1000;
+      const now = Date.now();
+      const since30 = new Date(now - 30 * DAY);
+      const prev30Start = new Date(now - 60 * DAY);
+
+      const [byStatus, reqByStatus] = await Promise.all([
+        prisma.candidate.groupBy({ by: ["status"], _count: { _all: true } }),
+        prisma.hireRequest.groupBy({ by: ["status"], _count: { _all: true } }),
+      ]);
+      const [
+        candTotal,
+        reqTotal,
+        reqNew,
+        req30,
+        msgTotal,
+        msgUnread,
+        hiresTotal,
+        cand30,
+        candPrev30,
+        req30Delta,
+        reqPrev30,
+        msg30,
+        msgPrev30,
+        hires30,
+        hiresPrev30,
+        requestsLast30Days,
+        interviewPipeline,
+      ] = await prisma.$transaction([
         prisma.candidate.count(),
         prisma.hireRequest.count(),
         prisma.hireRequest.count({ where: { status: "NEW" } }),
-        prisma.hireRequest.count({ where: { createdAt: { gte: since } } }),
+        prisma.hireRequest.count({ where: { createdAt: { gte: since30 } } }),
         prisma.contactMessage.count(),
         prisma.contactMessage.count({ where: { status: "UNREAD" } }),
+        prisma.hireRequest.count({ where: { status: "PLACED" } }),
+        prisma.candidate.count({ where: { createdAt: { gte: since30 } } }),
+        prisma.candidate.count({ where: { createdAt: { gte: prev30Start, lt: since30 } } }),
+        prisma.hireRequest.count({ where: { createdAt: { gte: since30 } } }),
+        prisma.hireRequest.count({ where: { createdAt: { gte: prev30Start, lt: since30 } } }),
+        prisma.contactMessage.count({ where: { createdAt: { gte: since30 } } }),
+        prisma.contactMessage.count({ where: { createdAt: { gte: prev30Start, lt: since30 } } }),
+        prisma.hireRequest.count({ where: { status: "PLACED", updatedAt: { gte: since30 } } }),
+        prisma.hireRequest.count({ where: { status: "PLACED", updatedAt: { gte: prev30Start, lt: since30 } } }),
+        prisma.hireRequest.findMany({ where: { createdAt: { gte: since30 } }, select: { createdAt: true } }),
+        prisma.hireRequest.findMany({
+          where: { status: { in: ["MATCHING", "INTERVIEWING"] } },
+          orderBy: { updatedAt: "desc" },
+          take: 5,
+          select: { id: true, fullName: true, service: true, city: true, status: true, startDate: true },
+        }),
       ]);
+
+      const trend: { date: string; count: number }[] = [];
+      for (let i = 29; i >= 0; i--) {
+        const dayStart = new Date(now - i * DAY);
+        dayStart.setHours(0, 0, 0, 0);
+        const dayEnd = new Date(dayStart.getTime() + DAY);
+        const count = requestsLast30Days.filter((r) => r.createdAt >= dayStart && r.createdAt < dayEnd).length;
+        trend.push({ date: dayStart.toISOString().slice(0, 10), count });
+      }
+
+      /** % change vs the prior period; null (rendered as "New") when there's no prior-period data to compare against — a raw % there would be meaningless. */
+      const pctDelta = (curr: number, prev: number): number | null => {
+        if (prev === 0) return null;
+        return Math.round(((curr - prev) / prev) * 100);
+      };
+
       return {
         candidates: { total: candTotal, byStatus: Object.fromEntries(byStatus.map((r) => [r.status, r._count._all])) },
-        requests: { total: reqTotal, new: reqNew, last30Days: req30 },
+        requests: { total: reqTotal, new: reqNew, last30Days: req30, byStatus: Object.fromEntries(reqByStatus.map((r) => [r.status, r._count._all])) },
         messages: { total: msgTotal, unread: msgUnread },
+        hires: { total: hiresTotal },
+        deltas: {
+          requests30d: pctDelta(req30Delta, reqPrev30),
+          candidates30d: pctDelta(cand30, candPrev30),
+          messages30d: pctDelta(msg30, msgPrev30),
+          hires30d: pctDelta(hires30, hiresPrev30),
+        },
+        trend,
+        interviewPipeline,
       };
     });
 
@@ -110,7 +176,8 @@ const adminRoutes: FastifyPluginAsync = async (app) => {
       const c = await prisma.candidate.findUnique({ where: { id: req.params.id }, include: { documents: true } });
       if (!c) throw notFound("Candidate");
       const store = await storage();
-      await Promise.all(c.documents.map((d) => store.remove(d.storageKey)));
+      const photoKey = c.photoUrl?.split("/files/")[1];
+      await Promise.all([...c.documents.map((d) => store.remove(d.storageKey)), ...(photoKey ? [store.remove(photoKey)] : [])]);
       await prisma.candidate.delete({ where: { id: c.id } });
       return { ok: true };
     });

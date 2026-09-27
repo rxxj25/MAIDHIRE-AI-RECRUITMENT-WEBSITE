@@ -25,6 +25,12 @@ const schema = z.object({
   RESEND_API_KEY: z.string().optional(),
   EMAIL_FROM: z.string().default("MaidHire <no-reply@maidhire.com>"),
   NOTIFY_EMAIL: z.string().optional(),
+  GEMINI_API_KEY: z.string().optional(),
+  LANGFLOW_API_URL: z.string().url().default("http://localhost:7860"),
+  LANGFLOW_API_KEY: z.string().optional(),
+  LANGFLOW_FLOW_ID: z.string().optional(),
+  TWILIO_AUTH_TOKEN: z.string().optional(),
+  VAPI_SERVER_SECRET: z.string().optional(),
 });
 
 const parsed = schema.safeParse(process.env);

@@ -8,6 +8,7 @@ import { useScrolled } from "@/hooks/useScrolled";
 import { cn } from "@/lib/utils";
 import { easeOut } from "@/lib/motion";
 import { useGuestLogout, useGuestMe } from "@/lib/guestAuth";
+import { useCandidateLogout, useCandidateMe } from "@/lib/candidateAuth";
 
 export const NAV = [
   { to: "/", label: "Home" },
@@ -29,8 +30,13 @@ export function Navbar() {
   const navigate = useNavigate();
   const reduce = useReducedMotion();
   const { data: guestData } = useGuestMe();
-  const logout = useGuestLogout();
+  const { data: candidateData } = useCandidateMe();
+  const guestLogout = useGuestLogout();
+  const candidateLogout = useCandidateLogout();
   const guest = guestData?.user;
+  const candidate = candidateData?.user;
+  // A visitor is at most one of these at a time; guest takes precedence if somehow both cookies exist.
+  const account = guest ? { name: guest.name, profileTo: undefined as string | undefined, logout: guestLogout } : candidate ? { name: candidate.name, profileTo: "/candidate/status", logout: candidateLogout } : null;
 
   useEffect(() => setOpen(false), [pathname]);
   useEffect(() => {
@@ -77,16 +83,23 @@ export function Navbar() {
 
         <div className="flex items-center gap-3">
           <div className="hidden items-center gap-3 sm:flex">
-            {guest ? (
+            {account ? (
               <div className="flex items-center gap-2">
-                <span className="flex items-center gap-2 rounded-full bg-white/10 py-2 pl-3 pr-4 text-[0.9rem] font-medium text-white ring-1 ring-white/20">
-                  <User aria-hidden="true" className="h-4 w-4" />
-                  {guest.name.split(" ")[0]}
-                </span>
+                {account.profileTo ? (
+                  <NavLink to={account.profileTo} className="flex items-center gap-2 rounded-full bg-white/10 py-2 pl-3 pr-4 text-[0.9rem] font-medium text-white ring-1 ring-white/20 hover:bg-white/15">
+                    <User aria-hidden="true" className="h-4 w-4" />
+                    {account.name.split(" ")[0]}
+                  </NavLink>
+                ) : (
+                  <span className="flex items-center gap-2 rounded-full bg-white/10 py-2 pl-3 pr-4 text-[0.9rem] font-medium text-white ring-1 ring-white/20">
+                    <User aria-hidden="true" className="h-4 w-4" />
+                    {account.name.split(" ")[0]}
+                  </span>
+                )}
                 <button
                   type="button"
                   aria-label="Log out"
-                  onClick={() => logout.mutate()}
+                  onClick={() => account.logout.mutate()}
                   className="inline-flex h-10 w-10 items-center justify-center rounded-full text-white/85 transition-colors hover:bg-white/10 hover:text-white"
                 >
                   <LogOut aria-hidden="true" className="h-4.5 w-4.5" />
@@ -138,13 +151,13 @@ export function Navbar() {
                 </motion.li>
               ))}
               <motion.li variants={{ hidden: { opacity: 0, x: -12 }, visible: { opacity: 1, x: 0 } }}>
-                {guest ? (
+                {account ? (
                   <button
                     type="button"
-                    onClick={() => logout.mutate(undefined, { onSuccess: () => navigate("/") })}
+                    onClick={() => account.logout.mutate(undefined, { onSuccess: () => navigate("/") })}
                     className="flex w-full items-center justify-between border-b border-white/10 py-4 text-lg font-semibold text-white/85"
                   >
-                    Log Out ({guest.name.split(" ")[0]})
+                    Log Out ({account.name.split(" ")[0]})
                   </button>
                 ) : (
                   <NavLink to="/login" className={({ isActive }) => cn("flex items-center justify-between border-b border-white/10 py-4 text-lg font-semibold text-white/85", isActive && "text-mint-500")}>
