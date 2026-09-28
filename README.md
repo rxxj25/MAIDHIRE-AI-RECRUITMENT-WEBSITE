@@ -15,9 +15,15 @@ Families need trained, verified household staff (maids, nannies, cooks, caregive
 | **Contact** | **Admin Dashboard** |
 | ![Contact page](docs/screenshots/contact.jpg) | ![Admin dashboard](docs/screenshots/admin-dashboard.jpg) |
 
-**Voice agent build** — the Langflow flow ("MaidHire Voice Receptionist") behind the AI phone receptionist:
+**Voice agent build** — the Langflow flow ("MaidHire Voice Receptionist") behind the AI phone receptionist, and the Vapi assistant fronting the phone number:
 
-![Langflow voice receptionist flow](docs/screenshots/langflow-voice-receptionist-flow.png)
+| Langflow flow | Vapi assistant |
+|---|---|
+| ![Langflow voice receptionist flow](docs/screenshots/langflow-voice-receptionist-flow.png) | ![Vapi assistant configuration](docs/screenshots/vapi-assistant-config.webp) |
+
+Vapi call logs showing live inbound calls to the receptionist number:
+
+![Vapi call logs](docs/screenshots/vapi-call-logs.webp)
 
 ## Why this exists
 
