@@ -4,6 +4,21 @@
 
 Families need trained, verified household staff (maids, nannies, cooks, caregivers) without the usual friction of agencies: opaque vetting, slow response times, and no way to ask a quick question outside office hours. MaidHire solves this with a self-serve marketplace (browse verified candidates, request a hire, subscribe to a plan) backed by an **admin operations console** for the recruitment team, and — the differentiator — an **AI voice receptionist that answers real phone calls**, grounded in the same knowledge base as the website's chatbot, so a customer gets a consistent, accurate answer whether they type or talk.
 
+## Screenshots
+
+| | |
+|---|---|
+| **Home** | **Browse Candidates** |
+| ![Home page](docs/screenshots/home.jpg) | ![Browse candidates](docs/screenshots/browse-candidates.jpg) |
+| **Candidate Profile** | **Pricing** |
+| ![Candidate profile](docs/screenshots/candidate-profile.jpg) | ![Pricing](docs/screenshots/pricing.jpg) |
+| **Contact** | **Admin Dashboard** |
+| ![Contact page](docs/screenshots/contact.jpg) | ![Admin dashboard](docs/screenshots/admin-dashboard.jpg) |
+
+**Voice agent build** — the Langflow flow ("MaidHire Voice Receptionist") behind the AI phone receptionist:
+
+![Langflow voice receptionist flow](docs/screenshots/langflow-voice-receptionist-flow.png)
+
 ## Why this exists
 
 Traditional recruitment agencies lose leads to slow response times and can't staff a receptionist around the clock. MaidHire's answer is a small, coordinated system of AI surfaces instead of one generic chatbot bolted onto a marketing site:

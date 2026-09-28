@@ -104,7 +104,12 @@ export function Footer() {
       </div>
       <div className="border-t border-white/12 bg-[#062b21]/35 backdrop-blur-[2px]">
         <div className="container-x flex flex-col items-center justify-between gap-3 py-6 text-[0.8rem] text-white/60 sm:flex-row lg:pr-[16%] xl:pr-[20%]">
-          <p>© {new Date().getFullYear()} MaidHire. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} MaidHire. All rights reserved. · Made by Rajdeep Bandyopadhaya ·{" "}
+            <a href="mailto:rajdeep04@icloud.com" className="hover:text-white">
+              rajdeep04@icloud.com
+            </a>
+          </p>
           <ul className="flex gap-6">
             <li>
               <Link to="/privacy" className="hover:text-white">

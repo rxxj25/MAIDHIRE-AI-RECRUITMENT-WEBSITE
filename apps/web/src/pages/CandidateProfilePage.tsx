@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, Briefcase, CalendarCheck, Globe2, Home, Languages, MapPin, UserRound, Wallet } from "lucide-react";
 import { AVAILABILITY_LABELS } from "@maidhire/shared";
@@ -18,6 +19,7 @@ export default function CandidateProfilePage() {
   const { slug = "" } = useParams();
   const { data: c, isLoading, error } = useCandidate(slug);
   const { data: plans } = usePlans();
+  const [imgError, setImgError] = useState(false);
 
   if (isLoading) return <div className="pt-40"><Spinner label="Loading profile" /></div>;
   if (error || !c) {
@@ -57,8 +59,8 @@ export default function CandidateProfilePage() {
         <div className="container-x grid gap-8 lg:grid-cols-[380px_1fr] lg:gap-12">
           <Reveal className="card overflow-hidden p-3 lg:sticky lg:top-28 lg:self-start">
             <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-cream-200">
-              {c.photoUrl ? (
-                <img src={c.photoUrl} alt={`${c.displayName}, ${serviceLabel(c.primaryService)}`} className="h-full w-full object-cover object-top" />
+              {c.photoUrl && !imgError ? (
+                <img src={c.photoUrl} alt={`${c.displayName}, ${serviceLabel(c.primaryService)}`} onError={() => setImgError(true)} className="h-full w-full object-cover object-top" />
               ) : (
                 <span className="flex h-full items-center justify-center text-ink-300">
                   <UserRound className="h-24 w-24" strokeWidth={1} aria-hidden="true" />

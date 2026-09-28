@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Briefcase, MapPin, UserRound } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
@@ -11,11 +12,12 @@ export const serviceLabel = (slug: string) => SERVICE_TYPES.find((s) => s.slug =
 
 export function CandidateCard({ c, className }: { c: PublicCandidate; className?: string }) {
   const reduce = useReducedMotion();
+  const [imgError, setImgError] = useState(false);
   return (
     <motion.article whileHover={reduce ? undefined : { y: -6 }} transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} className={cn("group card flex h-full flex-col overflow-hidden p-2.5", className)}>
       <Link to={`/candidates/${c.slug}`} className="relative block aspect-[4/3] overflow-hidden rounded-xl bg-cream-200" aria-label={`View ${c.displayName}'s profile`}>
-        {c.photoUrl ? (
-          <img src={c.photoUrl} alt={`${c.displayName}, ${serviceLabel(c.primaryService)}`} loading="lazy" decoding="async" width={400} height={300} className="h-full w-full object-cover object-top transition-transform duration-700 ease-[var(--ease-out-quart)] group-hover:scale-[1.05]" />
+        {c.photoUrl && !imgError ? (
+          <img src={c.photoUrl} alt={`${c.displayName}, ${serviceLabel(c.primaryService)}`} loading="lazy" decoding="async" width={400} height={300} onError={() => setImgError(true)} className="h-full w-full object-cover object-top transition-transform duration-700 ease-[var(--ease-out-quart)] group-hover:scale-[1.05]" />
         ) : (
           <span className="flex h-full w-full items-center justify-center text-ink-300">
             <UserRound className="h-16 w-16" strokeWidth={1.2} aria-hidden="true" />

@@ -9,3 +9,5 @@ build
 apps/api/uploads
 coverage
 .vite
+.vercel
+.env*

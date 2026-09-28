@@ -3,10 +3,8 @@
 import "dotenv/config";
 import { PrismaClient, type Prisma } from "@prisma/client";
 import argon2 from "argon2";
-import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { storage } from "../src/services/storage.js";
 
 const prisma = new PrismaClient();
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -72,18 +70,13 @@ const candidates: Seed[] = [
 
 async function seedCandidates() {
   if (process.env.SEED_CANDIDATES === "false") return;
-  const store = await storage();
   for (const c of candidates) {
     const { dob, photo, ...rest } = c;
-    let photoUrl: string | null = null;
-    if (photo) {
-      try {
-        const buf = await readFile(path.join(here, "seed-assets", photo));
-        photoUrl = (await store.put(buf, { folder: "photos", ext: "webp", contentType: "image/webp", isPublic: true })).url;
-      } catch {
-        /* asset not present yet — leave photoUrl null */
-      }
-    }
+    // Seed photos are served as static assets from apps/web/public/images/candidates
+    // (copied 1:1 from seed-assets) rather than through the storage service: on Vercel,
+    // STORAGE_DRIVER=local writes to the build container's disk, which doesn't survive
+    // into the runtime function, so uploaded-looking seed photos would 404 in production.
+    const photoUrl = photo ? `/images/candidates/${photo}` : null;
     const data = { ...rest, dateOfBirth: new Date(dob), displayName: `${c.firstName} ${c.lastName.charAt(0)}.`, ...(photoUrl ? { photoUrl } : {}) };
     await prisma.candidate.upsert({
       where: { slug: c.slug },
